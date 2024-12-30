@@ -21,6 +21,7 @@
 		E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E91AE1DF2D218FAF0076BD59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StarLight.entitlements; sourceTree = "<group>"; };
+		E94CDF912D227DE5005B69BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +65,7 @@
 		E91AE1E22D218FAF0076BD59 /* StarLight */ = {
 			isa = PBXGroup;
 			children = (
+				E94CDF912D227DE5005B69BA /* Info.plist */,
 				E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */,
 				E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */,
 				E91AE1E02D218FAF0076BD59 /* MainMenu.xib */,
@@ -294,7 +296,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D5Q73692VW;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StarLight/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -320,7 +325,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D5Q73692VW;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StarLight/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;

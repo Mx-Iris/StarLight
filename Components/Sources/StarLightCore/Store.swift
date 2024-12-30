@@ -9,13 +9,21 @@ import Foundation
 import GitHubModels
 import GitHubNetworking
 import AuthenticationServices
+import StarLightUtilities
 
-final class Store {
-    private(set) var repositories: [Repository] = []
+public final class Store {
+    public private(set) var repositories: [Repository] = []
 
-    private var client: GitHubClient?
+    private var client: GitHubClient
 
-    init() {}
+    public init(token: Token) {
+        self.client = .init(token: token)
+    }
+
+    public func fetchRepositories() async throws {
+        let user = try await client.authenticatedUser()
+        repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
+    }
 }
 
 public enum Configs {
@@ -30,16 +38,30 @@ public enum Configs {
 
 public final class UserManager {
     public static let shared = UserManager()
+
     private init() {}
+
     private var authSession: ASWebAuthenticationSession?
+
     private let presentationContextProvider = WebAuthenticationPresentationContextProvidingCoordinator()
-    public func startAuthentication() async throws -> Token {
+
+    @Keychain(key: "token", service: "StarLightCore-UserManager", defaultValue: nil)
+    public private(set) var token: Token?
+
+    @UserDefault(defaultValue: nil)
+    public private(set) var user: User?
+
+    public var hasLogin: Bool {
+        token != nil
+    }
+    
+    public func login() async throws {
         enum UnknownError: Error {
             case unknownError
         }
 
-        return try await withCheckedThrowingContinuation { continuation in
-            authSession = ASWebAuthenticationSession(url: Configs.App.githubLoginURL, callbackURLScheme: Configs.App.urlScheme, completionHandler: { url, error in
+        token = try await withCheckedThrowingContinuation { continuation in
+            let authSession = ASWebAuthenticationSession(url: Configs.App.githubLoginURL, callbackURLScheme: Configs.App.urlScheme, completionHandler: { url, error in
                 if let code = url?.queryParameters?["code"] {
                     GitHubClient.createAccessToken(clientId: Configs.App.githubID, clientSecret: Configs.App.githubSecrets, code: code, redirectURI: nil, state: nil) { result in
                         switch result {
@@ -56,10 +78,12 @@ public final class UserManager {
                 }
 
             })
-            authSession?.presentationContextProvider = presentationContextProvider
-            authSession?.prefersEphemeralWebBrowserSession = true
-            authSession?.start()
+            authSession.presentationContextProvider = presentationContextProvider
+            authSession.prefersEphemeralWebBrowserSession = true
+            authSession.start()
+            self.authSession = authSession
         }
+        user = try await GitHubClient(token: token).authenticatedUser()
     }
 }
 
@@ -83,3 +107,5 @@ extension URL {
         return items
     }
 }
+
+extension User: @retroactive UserDefaultSerializable {}

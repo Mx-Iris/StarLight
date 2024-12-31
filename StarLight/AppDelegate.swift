@@ -10,6 +10,8 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    let appServices = AppServices()
+    
     @IBOutlet var window: NSWindow!
 
 

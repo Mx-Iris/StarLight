@@ -13,6 +13,13 @@
 		E9794A652D22E54000AAA0C7 /* StarLightUI in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A642D22E54000AAA0C7 /* StarLightUI */; };
 		E9794A672D22E6E900AAA0C7 /* StarLightCore in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A662D22E6E900AAA0C7 /* StarLightCore */; };
 		E9794A692D22E70A00AAA0C7 /* StarLightUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A682D22E70A00AAA0C7 /* StarLightUtilities */; };
+		E9E06A082D23E897008055CE /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A052D23E897008055CE /* LoginView.swift */; };
+		E9E06A092D23E897008055CE /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A062D23E897008055CE /* LoginViewModel.swift */; };
+		E9E06A0A2D23E897008055CE /* LoginWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A072D23E897008055CE /* LoginWindowController.swift */; };
+		E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A042D23E897008055CE /* LoginCoordinator.swift */; };
+		E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A0C2D23E913008055CE /* ViewModel.swift */; };
+		E9E06A0F2D23E937008055CE /* AppServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A0E2D23E937008055CE /* AppServices.swift */; };
+		E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A102D23E95E008055CE /* AppCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +30,13 @@
 		E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StarLight.entitlements; sourceTree = "<group>"; };
 		E932BA652D22CA8F0052C3EE /* Components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Components; sourceTree = "<group>"; };
 		E94CDF912D227DE5005B69BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E9E06A042D23E897008055CE /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		E9E06A052D23E897008055CE /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		E9E06A062D23E897008055CE /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		E9E06A072D23E897008055CE /* LoginWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWindowController.swift; sourceTree = "<group>"; };
+		E9E06A0C2D23E913008055CE /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		E9E06A0E2D23E937008055CE /* AppServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppServices.swift; sourceTree = "<group>"; };
+		E9E06A102D23E95E008055CE /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +83,13 @@
 			children = (
 				E94CDF912D227DE5005B69BA /* Info.plist */,
 				E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */,
+				E9E06A0E2D23E937008055CE /* AppServices.swift */,
+				E9E06A102D23E95E008055CE /* AppCoordinator.swift */,
+				E9E06A0C2D23E913008055CE /* ViewModel.swift */,
+				E9E06A042D23E897008055CE /* LoginCoordinator.swift */,
+				E9E06A052D23E897008055CE /* LoginView.swift */,
+				E9E06A062D23E897008055CE /* LoginViewModel.swift */,
+				E9E06A072D23E897008055CE /* LoginWindowController.swift */,
 				E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */,
 				E91AE1E02D218FAF0076BD59 /* MainMenu.xib */,
 				E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */,
@@ -155,6 +176,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E91AE1E32D218FAF0076BD59 /* AppDelegate.swift in Sources */,
+				E9E06A082D23E897008055CE /* LoginView.swift in Sources */,
+				E9E06A0F2D23E937008055CE /* AppServices.swift in Sources */,
+				E9E06A092D23E897008055CE /* LoginViewModel.swift in Sources */,
+				E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */,
+				E9E06A0A2D23E897008055CE /* LoginWindowController.swift in Sources */,
+				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
+				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

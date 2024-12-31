@@ -58,6 +58,10 @@ let package = Package(
             url: "https://github.com/MrKai77/Luminare",
             branch: "main"
         ),
+        .package(
+            url: "https://github.com/Mx-Iris/CocoaCoordinator",
+            branch: "main"
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -74,7 +78,6 @@ let package = Package(
         .target(
             name: "StarLightUI",
             dependencies: [
-                "StarLightCore",
                 .product(name: "DSFQuickActionBar", package: "DSFQuickActionBar"),
                 .product(name: "Luminare", package: "Luminare"),
             ]
@@ -86,6 +89,7 @@ let package = Package(
                 .product(name: "Defaults", package: "Defaults"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
                 .product(name: "UIFoundation", package: "UIFoundation"),
+                .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
             ]
         ),
     ]

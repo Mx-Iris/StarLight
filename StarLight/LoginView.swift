@@ -3,40 +3,41 @@ import SwiftUI
 import Luminare
 
 final class LoginViewController: NSHostingController<LoginView> {
-    
-    
     init(viewModel: LoginViewModel) {
-        super.init(rootView: .init(viewModel: viewModel))
+        var loginView = LoginView()
+        loginView.loginButtonClicked = { [weak viewModel] in
+            guard let viewModel else { return }
+            viewModel.login()
+        }
+        super.init(rootView: loginView)
     }
-    
-    @MainActor @preconcurrency required dynamic init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    @MainActor @preconcurrency dynamic required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
-
 
 struct LoginView: View {
     
-    @ObservedObject var viewModel: LoginViewModel
-    
+    var loginButtonClicked: (() -> Void)?
+
     var body: some View {
         VStack {
             Text("Welcome to StarLight")
                 .font(.largeTitle)
             Button {
-                viewModel.login()
+                loginButtonClicked?()
             } label: {
                 Text("Login")
             }
             .buttonStyle(LuminareCompactButtonStyle())
             .frame(width: 80, height: 30)
         }
+        .frame(width: 550, height: 300)
     }
 }
 
-@available(macOS 14.0, *)
 #Preview {
-    LoginView(viewModel: .init(router: TestCoordinator(initialRoute: nil)))
-        .frame(width: 550, height: 300)
+    LoginView(loginButtonClicked: nil)
 }

@@ -9,14 +9,12 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-
     let appServices = AppServices()
-    
-    @IBOutlet var window: NSWindow!
 
+    lazy var appCoordinator = AppCoordinator(appServices: appServices)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        _ = appCoordinator
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -26,7 +24,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
-
 }
-

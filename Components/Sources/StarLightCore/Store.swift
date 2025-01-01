@@ -8,8 +8,8 @@
 import Foundation
 import GitHubModels
 import GitHubNetworking
-import AuthenticationServices
 import StarLightUtilities
+@preconcurrency import AuthenticationServices
 
 public final class Store {
     public private(set) var repositories: [Repository] = []
@@ -36,10 +36,10 @@ public enum Configs {
     }
 }
 
-public final class UserManager {
-    public static let shared = UserManager()
+public final class UserManager: @unchecked Sendable {
+//    public static let shared = UserManager()
 
-    private init() {}
+    public init() {}
 
     private var authSession: ASWebAuthenticationSession?
 
@@ -54,34 +54,36 @@ public final class UserManager {
     public var hasLogin: Bool {
         token != nil
     }
-    
+
     public func login() async throws {
         enum UnknownError: Error {
             case unknownError
         }
 
         token = try await withCheckedThrowingContinuation { continuation in
-            let authSession = ASWebAuthenticationSession(url: Configs.App.githubLoginURL, callbackURLScheme: Configs.App.urlScheme, completionHandler: { url, error in
-                if let code = url?.queryParameters?["code"] {
-                    GitHubClient.createAccessToken(clientId: Configs.App.githubID, clientSecret: Configs.App.githubSecrets, code: code, redirectURI: nil, state: nil) { result in
-                        switch result {
-                        case let .success(token):
-                            continuation.resume(returning: token)
-                        case let .failure(error):
-                            continuation.resume(throwing: error)
+            DispatchQueue.main.async { [self] in
+                let authSession = ASWebAuthenticationSession(url: Configs.App.githubLoginURL, callbackURLScheme: Configs.App.urlScheme, completionHandler: { url, error in
+                    if let code = url?.queryParameters?["code"] {
+                        GitHubClient.createAccessToken(clientId: Configs.App.githubID, clientSecret: Configs.App.githubSecrets, code: code, redirectURI: nil, state: nil) { result in
+                            switch result {
+                            case let .success(token):
+                                continuation.resume(returning: token)
+                            case let .failure(error):
+                                continuation.resume(throwing: error)
+                            }
                         }
+                    } else if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(throwing: UnknownError.unknownError)
                     }
-                } else if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(throwing: UnknownError.unknownError)
-                }
 
-            })
-            authSession.presentationContextProvider = presentationContextProvider
-            authSession.prefersEphemeralWebBrowserSession = true
-            authSession.start()
-            self.authSession = authSession
+                })
+                authSession.presentationContextProvider = presentationContextProvider
+                authSession.prefersEphemeralWebBrowserSession = true
+                authSession.start()
+                self.authSession = authSession
+            }
         }
         user = try await GitHubClient(token: token).authenticatedUser()
     }

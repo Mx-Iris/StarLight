@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E913AE792D25993C0027ACA1 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E913AE782D25993C0027ACA1 /* MainCoordinator.swift */; };
 		E91AE1E32D218FAF0076BD59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */; };
 		E91AE1E42D218FAF0076BD59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */; };
 		E91AE1E52D218FAF0076BD59 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1E02D218FAF0076BD59 /* MainMenu.xib */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E913AE782D25993C0027ACA1 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		E91AE1CD2D218FAA0076BD59 /* StarLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StarLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				E9E06A052D23E897008055CE /* LoginView.swift */,
 				E9E06A062D23E897008055CE /* LoginViewModel.swift */,
 				E9E06A072D23E897008055CE /* LoginWindowController.swift */,
+				E913AE782D25993C0027ACA1 /* MainCoordinator.swift */,
 				E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */,
 				E91AE1E02D218FAF0076BD59 /* MainMenu.xib */,
 				E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */,
@@ -182,6 +185,7 @@
 				E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */,
 				E9E06A0A2D23E897008055CE /* LoginWindowController.swift in Sources */,
 				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
+				E913AE792D25993C0027ACA1 /* MainCoordinator.swift in Sources */,
 				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

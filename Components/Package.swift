@@ -62,6 +62,11 @@ let package = Package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
             branch: "main"
         ),
+//        .package(url: "https://github.com/Mx-Iris/SystemSettingsNavigator", branch: "main")
+        .package(
+            url: "https://github.com/sindresorhus/KeyboardShortcuts",
+            .upToNextMajor(from: "2.0.0")
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

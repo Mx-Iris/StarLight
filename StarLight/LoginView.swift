@@ -3,7 +3,9 @@ import SwiftUI
 import Luminare
 
 final class LoginViewController: NSHostingController<LoginView> {
+    let viewModel: LoginViewModel
     init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
         var loginView = LoginView()
         loginView.loginButtonClicked = { [weak viewModel] in
             guard let viewModel else { return }
@@ -23,7 +25,7 @@ struct LoginView: View {
     var loginButtonClicked: (() -> Void)?
 
     var body: some View {
-        VStack {
+        VStack(spacing: 50) {
             Text("Welcome to StarLight")
                 .font(.largeTitle)
             Button {

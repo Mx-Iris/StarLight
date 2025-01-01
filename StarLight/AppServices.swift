@@ -10,5 +10,6 @@ import StarLightCore
 
 final class AppServices {
     let userManager = UserManager()
+    
     init() {}
 }

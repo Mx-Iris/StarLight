@@ -9,7 +9,9 @@ import Foundation
 import StarLightCore
 
 final class AppServices {
-    let userManager = UserManager()
+    let loginService = LoginService()
+    
+    let store = Store()
     
     init() {}
 }

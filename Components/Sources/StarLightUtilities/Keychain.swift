@@ -6,17 +6,21 @@
 //
 
 import Foundation
+import Combine
 import KeychainAccess
 
 @propertyWrapper
 public struct Keychain<T: Codable> {
     private let keychain: KeychainAccess.Keychain
 
+    private let subject = PassthroughSubject<T, Never>()
+    
     public var wrappedValue: T {
         set {
             do {
                 keychain[data: key] = try JSONEncoder().encode(newValue)
                 _cacheWrappedValue = newValue
+                subject.send(newValue)
             } catch {
                 print(error)
             }
@@ -46,5 +50,9 @@ public struct Keychain<T: Codable> {
         self.keychain = .init(service: service).synchronizable(true)
         self.key = key
         self.defaultValue = defaultValue
+    }
+    
+    public var projectedValue: some Publisher<T, Never> {
+        subject.eraseToAnyPublisher()
     }
 }

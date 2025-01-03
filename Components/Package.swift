@@ -95,6 +95,7 @@ let package = Package(
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
                 .product(name: "UIFoundation", package: "UIFoundation"),
                 .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
+                .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
             ]
         ),
     ]

@@ -12,17 +12,17 @@ import StarLightCore
 
 enum AppRoute: Routable {
     case login
-    case main
+    case settings
 }
 
 final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
     let appServices: AppServices
-
+    
     init(appServices: AppServices) {
         self.appServices = appServices
         let initialRoute: AppRoute
-        if appServices.userManager.hasLogin {
-            initialRoute = .main
+        if appServices.loginService.hasLogin {
+            initialRoute = .settings
         } else {
             initialRoute = .login
         }
@@ -36,15 +36,17 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
             loginCoordinator.delegate = self
             addChild(loginCoordinator)
             return .route(on: loginCoordinator, to: .login)
-        case .main:
-            return .none()
+        case .settings:
+            let settingsCoordinator = SettingsCoordinator(appServices: appServices)
+            addChild(settingsCoordinator)
+            return .route(on: settingsCoordinator, to: .main)
         }
     }
 }
 
 extension AppCoordinator: LoginCoordinator.Delegate {
     func loginCoordinatorDidLogin(_ coordinator: LoginCoordinator) {
-        trigger(.main)
+        trigger(.settings)
         removeChild(coordinator)
     }
 }

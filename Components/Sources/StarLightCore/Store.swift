@@ -23,6 +23,13 @@ public final class Store {
         self.tokenCancellable = KeychainStorage.$token.sink { [weak self] token in
             guard let self else { return }
             self.client = .init(token: token)
+            Task {
+                do {
+                    try await self.fetchRepositories()
+                } catch {
+                    print(error)
+                }
+            }
         }
     }
 

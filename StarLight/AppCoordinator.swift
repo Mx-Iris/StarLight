@@ -39,7 +39,7 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
         case .settings:
             let settingsCoordinator = SettingsCoordinator(appServices: appServices)
             addChild(settingsCoordinator)
-            return .route(on: settingsCoordinator, to: .main)
+            return .route(on: settingsCoordinator, to: .settings)
         }
     }
 }

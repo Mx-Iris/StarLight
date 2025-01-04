@@ -13,8 +13,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     lazy var appCoordinator = AppCoordinator(appServices: appServices)
 
+    lazy var mainController = MainController(appServices: appServices)
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         _ = appCoordinator
+        _ = mainController
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

@@ -11,7 +11,7 @@
 		E91AE1E32D218FAF0076BD59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */; };
 		E91AE1E42D218FAF0076BD59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */; };
 		E91AE1E52D218FAF0076BD59 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1E02D218FAF0076BD59 /* MainMenu.xib */; };
-		E9339F692D2811BD005AEA76 /* QuickActionBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F682D2811BD005AEA76 /* QuickActionBarController.swift */; };
+		E9339F692D2811BD005AEA76 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F682D2811BD005AEA76 /* MainController.swift */; };
 		E9339F952D282B09005AEA76 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */; };
 		E9339F972D282B39005AEA76 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F962D282B39005AEA76 /* SettingsViewController.swift */; };
 		E9339F992D282BE2005AEA76 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */; };
@@ -36,7 +36,7 @@
 		E91AE1DF2D218FAF0076BD59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StarLight.entitlements; sourceTree = "<group>"; };
 		E932BA652D22CA8F0052C3EE /* Components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Components; sourceTree = "<group>"; };
-		E9339F682D2811BD005AEA76 /* QuickActionBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionBarController.swift; sourceTree = "<group>"; };
+		E9339F682D2811BD005AEA76 /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
 		E9339F962D282B39005AEA76 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
@@ -97,6 +97,7 @@
 				E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */,
 				E9E06A0E2D23E937008055CE /* AppServices.swift */,
 				E9E06A102D23E95E008055CE /* AppCoordinator.swift */,
+				E9339F682D2811BD005AEA76 /* MainController.swift */,
 				E9E06A0C2D23E913008055CE /* ViewModel.swift */,
 				E9E06A042D23E897008055CE /* LoginCoordinator.swift */,
 				E9E06A052D23E897008055CE /* LoginViewController.swift */,
@@ -106,7 +107,6 @@
 				E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */,
 				E9339F962D282B39005AEA76 /* SettingsViewController.swift */,
 				E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */,
-				E9339F682D2811BD005AEA76 /* QuickActionBarController.swift */,
 				E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */,
 				E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */,
 				E91AE1E02D218FAF0076BD59 /* MainMenu.xib */,
@@ -203,7 +203,7 @@
 				E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */,
 				E9E06A0A2D23E897008055CE /* LoginWindowController.swift in Sources */,
 				E9339F952D282B09005AEA76 /* KeyboardShortcuts.swift in Sources */,
-				E9339F692D2811BD005AEA76 /* QuickActionBarController.swift in Sources */,
+				E9339F692D2811BD005AEA76 /* MainController.swift in Sources */,
 				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
 				E913AE792D25993C0027ACA1 /* SettingsCoordinator.swift in Sources */,
 				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,

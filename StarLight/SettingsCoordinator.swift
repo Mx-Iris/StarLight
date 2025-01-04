@@ -10,7 +10,7 @@ import UIFoundation
 import CocoaCoordinator
 
 enum SettingsRoute: Routable {
-    case main
+    case settings
     case logout
 }
 
@@ -22,6 +22,15 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
     init(appServices: AppServices) {
         self.appServices = appServices
         super.init(windowController: .init(), initialRoute: nil)
+    }
+    override func prepareTransition(for route: SettingsRoute) -> SettingsTransition {
+        switch route {
+        case .settings:
+            let settingsViewController = SettingsViewController()
+            return .show(settingsViewController)
+        case .logout:
+            return .close()
+        }
     }
 }
 

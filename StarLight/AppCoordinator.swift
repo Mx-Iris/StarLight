@@ -13,20 +13,25 @@ import StarLightCore
 enum AppRoute: Routable {
     case login
     case settings
+    case main
 }
 
 final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
     let appServices: AppServices
-    
+    let mainCoordinator: MainCoordinator
     init(appServices: AppServices) {
         self.appServices = appServices
-        let initialRoute: AppRoute
+        self.mainCoordinator = MainCoordinator(appServices: appServices)
+        var initialRoute: AppRoute?
         if appServices.loginService.hasLogin {
             initialRoute = .settings
         } else {
             initialRoute = .login
         }
         super.init(initialRoute: initialRoute)
+        
+    
+        addChild(mainCoordinator)
     }
 
     override func prepareTransition(for route: AppRoute) -> AppTransition {
@@ -37,9 +42,16 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
             addChild(loginCoordinator)
             return .route(on: loginCoordinator, to: .login)
         case .settings:
-            let settingsCoordinator = SettingsCoordinator(appServices: appServices)
-            addChild(settingsCoordinator)
+            let settingsCoordinator: SettingsCoordinator
+            if let child = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
+                settingsCoordinator = child
+            } else {
+                settingsCoordinator = SettingsCoordinator(appServices: appServices)
+                addChild(settingsCoordinator)
+            }
             return .route(on: settingsCoordinator, to: .settings)
+        case .main:
+            return .route(on: mainCoordinator, to: .present)
         }
     }
 }

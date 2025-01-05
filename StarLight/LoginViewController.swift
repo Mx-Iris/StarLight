@@ -20,7 +20,7 @@ struct LoginView: View {
     var loginButtonClicked: (() -> Void)?
 
     var body: some View {
-        VStack(spacing: 50) {
+        VStack(spacing: 30) {
             Text("Welcome to StarLight")
                 .font(.largeTitle)
             Button {
@@ -29,7 +29,6 @@ struct LoginView: View {
                 Text("Login")
             }
             .buttonStyle(LuminareCompactButtonStyle())
-            .frame(width: 80, height: 30)
         }
         .frame(width: 550, height: 300)
     }

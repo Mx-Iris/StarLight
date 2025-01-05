@@ -9,19 +9,38 @@ import Foundation
 import SwiftUI
 import KeyboardShortcuts
 
+final class SettingsViewModel: ViewModel<SettingsRoute> {
+    
+}
+
+
 final class SettingsViewController: XiblessHostingController<SettingsView> {
-    init() {
+    let viewModel: SettingsViewModel
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
         super.init(rootView: .init())
     }
 }
 
 struct SettingsView: View {
     var body: some View {
-        KeyboardShortcuts.Recorder("StarLight Hotkeys", name: .main)
+        VStack {
+            Form {
+                Section {
+                    KeyboardShortcuts.Recorder("StarLight Hotkeys", name: .main)
+
+                } footer: {
+                    Button {} label: {
+                        Text("Logout")
+                    }
+                    Spacer()
+                }
+            }
+            .formStyle(.grouped)
             .frame(width: 500, height: 300)
+        }
     }
 }
-
 
 #Preview {
     SettingsView()

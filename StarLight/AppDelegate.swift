@@ -7,17 +7,18 @@
 
 import Cocoa
 
+@MainActor
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     let appServices = AppServices()
 
     lazy var appCoordinator = AppCoordinator(appServices: appServices)
-
-    lazy var mainController = MainController(appServices: appServices)
+    
+    lazy var statusItemController = AppStatusItemController(router: appCoordinator)
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         _ = appCoordinator
-        _ = mainController
+        _ = statusItemController
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

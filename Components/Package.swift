@@ -31,6 +31,10 @@ let package = Package(
             name: "StarLightUtilities",
             targets: ["StarLightUtilities"]
         ),
+        .library(
+            name: "StarLightResources",
+            targets: ["StarLightResources"]
+        ),
     ],
     dependencies: [
         .package(
@@ -38,10 +42,11 @@ let package = Package(
             remotePath: "https://github.com/Mx-Iris/GitHubServices",
             branch: "main"
         ),
-        .package(
-            url: "https://github.com/dagronf/DSFQuickActionBar",
-            .upToNextMajor(from: "6.2.0")
-        ),
+//        .package(
+//            url: "https://github.com/dagronf/DSFQuickActionBar",
+//            branch: "main"
+//        ),
+        .package(path: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar"),
         .package(
             url: "https://github.com/sindresorhus/Defaults",
             from: "8.2.0"
@@ -55,17 +60,32 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/MrKai77/Luminare",
+            url: "https://github.com/MxIris-macOS-Library-Forks/Luminare",
             branch: "main"
         ),
         .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
             branch: "main"
         ),
-//        .package(url: "https://github.com/Mx-Iris/SystemSettingsNavigator", branch: "main")
         .package(
             url: "https://github.com/sindresorhus/KeyboardShortcuts",
             .upToNextMajor(from: "2.0.0")
+        ),
+        .package(
+            url: "https://github.com/SDWebImage/SDWebImageSwiftUI",
+            .upToNextMajor(from: "3.0.0")
+        ),
+        .package(
+            url: "https://github.com/hexedbits/StatusItemController",
+            .upToNextMajor(from: "2.0.0")
+        ),
+        .package(
+            url: "https://github.com/j-f1/MenuBuilder",
+            .upToNextMajor(from: "3.0.0")
+        ),
+        .package(
+            url: "https://github.com/Mx-Iris/SFSymbol",
+            branch: "main"
         ),
     ],
     targets: [
@@ -85,6 +105,10 @@ let package = Package(
             dependencies: [
                 .product(name: "DSFQuickActionBar", package: "DSFQuickActionBar"),
                 .product(name: "Luminare", package: "Luminare"),
+                .product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI"),
+                .product(name: "StatusItemController", package: "StatusItemController"),
+                .product(name: "MenuBuilder", package: "MenuBuilder"),
+                .product(name: "SFSymbol", package: "SFSymbol"),
             ]
         ),
 
@@ -96,6 +120,12 @@ let package = Package(
                 .product(name: "UIFoundation", package: "UIFoundation"),
                 .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
+            ]
+        ),
+        .target(
+            name: "StarLightResources",
+            resources: [
+                .process("Resources"),
             ]
         ),
     ]

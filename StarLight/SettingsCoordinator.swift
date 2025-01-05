@@ -22,11 +22,13 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
     init(appServices: AppServices) {
         self.appServices = appServices
         super.init(windowController: .init(), initialRoute: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(_:)), name: NSWindow.willCloseNotification, object: windowController.window)
     }
+
     override func prepareTransition(for route: SettingsRoute) -> SettingsTransition {
         switch route {
         case .settings:
-            let settingsViewController = SettingsViewController()
+            let settingsViewController = SettingsViewController(viewModel: .init(appServices: appServices, router: self))
             return .show(settingsViewController)
         case .logout:
             return .close()
@@ -34,3 +36,8 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
     }
 }
 
+extension SettingsCoordinator {
+    @objc func windowWillClose(_ notification: Notification) {
+        removeFromParent()
+    }
+}

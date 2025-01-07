@@ -1,5 +1,5 @@
 {
-  "originHash" : "dfd9bbc1dbbd2ea8456cfef50c1e58994d12123dbed94bf416c9f861ba289229",
+  "originHash" : "d49f180e777b4b28d05ce80a4664ac8d6850257baee8484d5dfe85b53cee131a",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -65,6 +65,15 @@
       }
     },
     {
+      "identity" : "dsfquickactionbar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dagronf/DSFQuickActionBar",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7be7b3bd2cebb19ee119ba1f972ecce581de5aeb"
+      }
+    },
+    {
       "identity" : "frameworktoolbox",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Mx-Iris/FrameworkToolbox",
@@ -80,6 +89,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "dd7d12487d637c71707597a75be84ee3c11f86f9"
+      }
+    },
+    {
+      "identity" : "githubservices",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mx-Iris/GitHubServices",
+      "state" : {
+        "branch" : "main",
+        "revision" : "476f5289b0b763cd0228e3862dac3fded58f843e"
       }
     },
     {

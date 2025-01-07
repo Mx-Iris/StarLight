@@ -42,11 +42,11 @@ let package = Package(
             remotePath: "https://github.com/Mx-Iris/GitHubServices",
             branch: "main"
         ),
-//        .package(
-//            url: "https://github.com/dagronf/DSFQuickActionBar",
-//            branch: "main"
-//        ),
-        .package(path: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar"),
+        .package(
+            url: "https://github.com/dagronf/DSFQuickActionBar",
+            branch: "main"
+        ),
+//        .package(path: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar"),
         .package(
             url: "https://github.com/sindresorhus/Defaults",
             from: "8.2.0"

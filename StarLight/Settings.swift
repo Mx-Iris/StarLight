@@ -6,5 +6,11 @@
 //
 
 import Foundation
+import StarLightUtilities
 
-enum Settings {}
+enum Settings {
+    
+    static var showRepositoryDescription: Bool = false
+    
+    
+}

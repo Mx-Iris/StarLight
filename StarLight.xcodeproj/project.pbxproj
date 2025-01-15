@@ -54,61 +54,7 @@
 		E9E06A102D23E95E008055CE /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		E9E90AED2D2A5A03001607C9 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		E9E90AEF2D2A5AF4001607C9 /* AppStatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStatusItemController.swift; sourceTree = "<group>"; };
-		E9FA27322D295527008D9221 /* StarLightCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StarLightCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E9FA27442D295548008D9221 /* StarLightUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StarLightUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E9FA27552D295553008D9221 /* StarLightUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StarLightUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E9FA273D2D295527008D9221 /* Exceptions for "StarLightCore" folder in "StarLightCore" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				StarLightCore.h,
-			);
-			target = E9FA27312D295527008D9221 /* StarLightCore */;
-		};
-		E9FA274C2D295548008D9221 /* Exceptions for "StarLightUtilities" folder in "StarLightUtilities" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				StarLightUtilities.h,
-			);
-			target = E9FA27432D295548008D9221 /* StarLightUtilities */;
-		};
-		E9FA275D2D295553008D9221 /* Exceptions for "StarLightUI" folder in "StarLightUI" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				StarLightUI.h,
-			);
-			target = E9FA27542D295553008D9221 /* StarLightUI */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		E9FA27332D295527008D9221 /* StarLightCore */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E9FA273D2D295527008D9221 /* Exceptions for "StarLightCore" folder in "StarLightCore" target */,
-			);
-			path = StarLightCore;
-			sourceTree = "<group>";
-		};
-		E9FA27452D295548008D9221 /* StarLightUtilities */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E9FA274C2D295548008D9221 /* Exceptions for "StarLightUtilities" folder in "StarLightUtilities" target */,
-			);
-			path = StarLightUtilities;
-			sourceTree = "<group>";
-		};
-		E9FA27562D295553008D9221 /* StarLightUI */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E9FA275D2D295553008D9221 /* Exceptions for "StarLightUI" folder in "StarLightUI" target */,
-			);
-			path = StarLightUI;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E91AE1CA2D218FAA0076BD59 /* Frameworks */ = {
@@ -119,27 +65,6 @@
 				E9794A652D22E54000AAA0C7 /* StarLightUI in Frameworks */,
 				E9794A692D22E70A00AAA0C7 /* StarLightUtilities in Frameworks */,
 				E9FA27682D295FFA008D9221 /* StarLightResources in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA272F2D295527008D9221 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27412D295548008D9221 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27522D295553008D9221 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,9 +83,6 @@
 			children = (
 				E932BA652D22CA8F0052C3EE /* Components */,
 				E91AE1E22D218FAF0076BD59 /* StarLight */,
-				E9FA27332D295527008D9221 /* StarLightCore */,
-				E9FA27452D295548008D9221 /* StarLightUtilities */,
-				E9FA27562D295553008D9221 /* StarLightUI */,
 				E912A77D2D21A21100E527AD /* Frameworks */,
 				E91AE1CE2D218FAA0076BD59 /* Products */,
 			);
@@ -170,9 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				E91AE1CD2D218FAA0076BD59 /* StarLight.app */,
-				E9FA27322D295527008D9221 /* StarLightCore.framework */,
-				E9FA27442D295548008D9221 /* StarLightUtilities.framework */,
-				E9FA27552D295553008D9221 /* StarLightUI.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -206,30 +125,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		E9FA272D2D295527008D9221 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA273F2D295548008D9221 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27502D295553008D9221 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		E91AE1CC2D218FAA0076BD59 /* StarLight */ = {
 			isa = PBXNativeTarget;
@@ -254,75 +149,6 @@
 			productReference = E91AE1CD2D218FAA0076BD59 /* StarLight.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E9FA27312D295527008D9221 /* StarLightCore */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E9FA273E2D295527008D9221 /* Build configuration list for PBXNativeTarget "StarLightCore" */;
-			buildPhases = (
-				E9FA272D2D295527008D9221 /* Headers */,
-				E9FA272E2D295527008D9221 /* Sources */,
-				E9FA272F2D295527008D9221 /* Frameworks */,
-				E9FA27302D295527008D9221 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				E9FA27332D295527008D9221 /* StarLightCore */,
-			);
-			name = StarLightCore;
-			packageProductDependencies = (
-			);
-			productName = StarLightCore;
-			productReference = E9FA27322D295527008D9221 /* StarLightCore.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		E9FA27432D295548008D9221 /* StarLightUtilities */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E9FA274D2D295548008D9221 /* Build configuration list for PBXNativeTarget "StarLightUtilities" */;
-			buildPhases = (
-				E9FA273F2D295548008D9221 /* Headers */,
-				E9FA27402D295548008D9221 /* Sources */,
-				E9FA27412D295548008D9221 /* Frameworks */,
-				E9FA27422D295548008D9221 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				E9FA27452D295548008D9221 /* StarLightUtilities */,
-			);
-			name = StarLightUtilities;
-			packageProductDependencies = (
-			);
-			productName = StarLightUtilities;
-			productReference = E9FA27442D295548008D9221 /* StarLightUtilities.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		E9FA27542D295553008D9221 /* StarLightUI */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E9FA275E2D295553008D9221 /* Build configuration list for PBXNativeTarget "StarLightUI" */;
-			buildPhases = (
-				E9FA27502D295553008D9221 /* Headers */,
-				E9FA27512D295553008D9221 /* Sources */,
-				E9FA27522D295553008D9221 /* Frameworks */,
-				E9FA27532D295553008D9221 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				E9FA27562D295553008D9221 /* StarLightUI */,
-			);
-			name = StarLightUI;
-			packageProductDependencies = (
-			);
-			productName = StarLightUI;
-			productReference = E9FA27552D295553008D9221 /* StarLightUI.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -334,15 +160,6 @@
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					E91AE1CC2D218FAA0076BD59 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					E9FA27312D295527008D9221 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					E9FA27432D295548008D9221 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					E9FA27542D295553008D9221 = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
@@ -364,9 +181,6 @@
 			projectRoot = "";
 			targets = (
 				E91AE1CC2D218FAA0076BD59 /* StarLight */,
-				E9FA27312D295527008D9221 /* StarLightCore */,
-				E9FA27542D295553008D9221 /* StarLightUI */,
-				E9FA27432D295548008D9221 /* StarLightUtilities */,
 			);
 		};
 /* End PBXProject section */
@@ -378,27 +192,6 @@
 			files = (
 				E91AE1E42D218FAF0076BD59 /* Assets.xcassets in Resources */,
 				E91AE1E52D218FAF0076BD59 /* MainMenu.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27302D295527008D9221 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27422D295548008D9221 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27532D295553008D9221 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,27 +218,6 @@
 				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
 				E913AE792D25993C0027ACA1 /* SettingsCoordinator.swift in Sources */,
 				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA272E2D295527008D9221 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27402D295548008D9221 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9FA27512D295553008D9221 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +366,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StarLight/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -623,6 +396,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StarLight/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -636,218 +410,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		E9FA273B2D295527008D9221 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D5Q73692VW;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLightCore;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		E9FA273C2D295527008D9221 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D5Q73692VW;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLightCore;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		E9FA274E2D295548008D9221 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D5Q73692VW;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLightUtilities;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		E9FA274F2D295548008D9221 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D5Q73692VW;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLightUtilities;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		E9FA275F2D295553008D9221 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D5Q73692VW;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLightUI;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		E9FA27602D295553008D9221 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D5Q73692VW;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLightUI;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_INSTALL_OBJC_HEADER = NO;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -868,33 +430,6 @@
 			buildConfigurations = (
 				E91AE1DB2D218FAB0076BD59 /* Debug */,
 				E91AE1DC2D218FAB0076BD59 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E9FA273E2D295527008D9221 /* Build configuration list for PBXNativeTarget "StarLightCore" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E9FA273B2D295527008D9221 /* Debug */,
-				E9FA273C2D295527008D9221 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E9FA274D2D295548008D9221 /* Build configuration list for PBXNativeTarget "StarLightUtilities" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E9FA274E2D295548008D9221 /* Debug */,
-				E9FA274F2D295548008D9221 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E9FA275E2D295553008D9221 /* Build configuration list for PBXNativeTarget "StarLightUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E9FA275F2D295553008D9221 /* Debug */,
-				E9FA27602D295553008D9221 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

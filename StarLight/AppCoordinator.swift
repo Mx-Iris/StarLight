@@ -5,7 +5,7 @@
 //  Created by JH on 2024/12/31.
 //
 
-import Foundation
+import AppKit
 import GitHubModels
 import CocoaCoordinator
 import StarLightCore
@@ -28,6 +28,11 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
         } else {
             initialRoute = .login
         }
+        
+        if initialRoute == nil {
+            NSApplication.shared.setActivationPolicy(.accessory)
+        }
+        
         super.init(initialRoute: initialRoute)
         
     

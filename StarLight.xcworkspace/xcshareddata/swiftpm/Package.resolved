@@ -1,5 +1,5 @@
 {
-  "originHash" : "dfd9bbc1dbbd2ea8456cfef50c1e58994d12123dbed94bf416c9f861ba289229",
+  "originHash" : "bed3452925d1401fe7fb1b537d5c2e012ba432f2a935dbb62a3ef88a2e655d82",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -62,6 +62,15 @@
       "state" : {
         "revision" : "e9add5fdf05fe50950d105c77963b7373ddb5ad4",
         "version" : "3.5.1"
+      }
+    },
+    {
+      "identity" : "dsfquickactionbar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7be7b3bd2cebb19ee119ba1f972ecce581de5aeb"
       }
     },
     {

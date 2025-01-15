@@ -46,8 +46,9 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
         switch route {
         case .logout:
             delegate?.settingsCoordinatorDidLogout(self)
-        default:
-            break
+        case .settings:
+            NSApp.setActivationPolicy(.regular)
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
 }
@@ -55,5 +56,6 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
 extension SettingsCoordinator {
     @objc func windowWillClose(_ notification: Notification) {
         removeFromParent()
+        NSApplication.shared.setActivationPolicy(.accessory)
     }
 }

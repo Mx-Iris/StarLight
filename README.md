@@ -1,3 +1,5 @@
+<img width="30%" src= "Resources/StarLight.png">
+
 # StarLight
 
 Search GitHub starred repositories like using Spotlight.

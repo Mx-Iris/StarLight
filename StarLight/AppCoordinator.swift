@@ -24,7 +24,7 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
         self.mainCoordinator = MainCoordinator(appServices: appServices)
         var initialRoute: AppRoute?
         if appServices.loginService.hasLogin {
-            initialRoute = .settings
+            initialRoute = Settings.showSettingsOnLaunch ? .settings : nil
         } else {
             initialRoute = .login
         }
@@ -49,6 +49,7 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
                 settingsCoordinator = SettingsCoordinator(appServices: appServices)
                 addChild(settingsCoordinator)
             }
+            settingsCoordinator.delegate = self
             return .route(on: settingsCoordinator, to: .settings)
         case .main:
             return .route(on: mainCoordinator, to: .present)
@@ -59,6 +60,13 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
 extension AppCoordinator: LoginCoordinator.Delegate {
     func loginCoordinatorDidLogin(_ coordinator: LoginCoordinator) {
         trigger(.settings)
+        removeChild(coordinator)
+    }
+}
+
+extension AppCoordinator: SettingsCoordinator.Delegate {
+    func settingsCoordinatorDidLogout(_ coordinator: SettingsCoordinator) {
+        trigger(.login)
         removeChild(coordinator)
     }
 }

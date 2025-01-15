@@ -127,13 +127,15 @@ struct StarLightCell: View {
                         .multilineTextAlignment(.leading)
                     Spacer()
                 }
-//                HStack {
-//                    Text(repository.description ?? "No description")
-//                        .multilineTextAlignment(.leading)
-//                        .foregroundColor(.secondary)
-//                        .font(.callout)
-//                    Spacer()
-//                }
+                if Settings.showRepositoryDescription {
+                    HStack {
+                        Text(repository.description ?? "No description")
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(.secondary)
+                            .font(.callout)
+                        Spacer()
+                    }
+                }
                 HStack(spacing: 15) {
                     if let programmingLanguage = repository.programmingLanguage {
                         HStack(spacing: 5) {

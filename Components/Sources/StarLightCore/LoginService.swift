@@ -51,6 +51,10 @@ public final class LoginService: @unchecked Sendable {
             }
         }
     }
+    
+    public func logout() {
+        KeychainStorage.token = nil
+    }
 }
 
 private class WebAuthenticationPresentationContextProvidingCoordinator: NSObject, ASWebAuthenticationPresentationContextProviding {

@@ -8,9 +8,18 @@
 import Foundation
 import SwiftUI
 import KeyboardShortcuts
+import Luminare
 
-final class SettingsViewModel: ViewModel<SettingsRoute> {
+class TestSettingsCoordinator: TestCoordinator<SettingsRoute> {
     
+}
+
+
+final class SettingsViewModel: ViewModel<SettingsRoute>, ObservableObject {
+    func logout() {
+        appServices.loginService.logout()
+        router.trigger(.logout)
+    }
 }
 
 
@@ -18,22 +27,37 @@ final class SettingsViewController: XiblessHostingController<SettingsView> {
     let viewModel: SettingsViewModel
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
-        super.init(rootView: .init())
+        super.init(rootView: .init(viewModel: viewModel))
     }
 }
 
 struct SettingsView: View {
+    @ObservedObject
+    var viewModel: SettingsViewModel
+    
     var body: some View {
         VStack {
             Form {
                 Section {
                     KeyboardShortcuts.Recorder("StarLight Hotkeys", name: .main)
-
-                } footer: {
-                    Button {} label: {
-                        Text("Logout")
+                    Toggle(isOn: Settings.$showRepositoryDescription) {
+                        Text("Show Repository Description")
                     }
-                    Spacer()
+                    Toggle(isOn: Settings.$showSettingsOnLaunch) {
+                        Text("Show Settings on Launch")
+                    }
+                } footer: {
+                    HStack {
+                        Spacer()
+                        Button {
+                            viewModel.logout()
+                        } label: {
+                            Text("Logout")
+                        }
+                        .buttonStyle(LuminareCompactButtonStyle())
+                        Spacer()
+                    }
+                    
                 }
             }
             .formStyle(.grouped)
@@ -43,5 +67,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(viewModel: .init(appServices: .init(), router: TestSettingsCoordinator(initialRoute: nil)))
 }

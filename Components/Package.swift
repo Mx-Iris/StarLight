@@ -86,6 +86,10 @@ let package = Package(
             url: "https://github.com/Mx-Iris/SFSymbol",
             branch: "main"
         ),
+        .package(
+            url: "https://github.com/sindresorhus/LaunchAtLogin-Modern",
+            .upToNextMajor(from: "1.0.0")
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -119,6 +123,7 @@ let package = Package(
                 .product(name: "UIFoundation", package: "UIFoundation"),
                 .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
+                .product(name: "LaunchAtLogin", package: "LaunchAtLogin-Modern"),
             ]
         ),
         .target(

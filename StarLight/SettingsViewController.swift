@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import KeyboardShortcuts
 import Luminare
+import LaunchAtLogin
 
 class TestSettingsCoordinator: TestCoordinator<SettingsRoute> {
     
@@ -46,6 +47,7 @@ struct SettingsView: View {
                     Toggle(isOn: Settings.$showSettingsOnLaunch) {
                         Text("Show Settings on Launch")
                     }
+                    LaunchAtLogin.Toggle()
                 } footer: {
                     HStack {
                         Spacer()

@@ -1,5 +1,5 @@
 {
-  "originHash" : "bed3452925d1401fe7fb1b537d5c2e012ba432f2a935dbb62a3ef88a2e655d82",
+  "originHash" : "796d0b2e5be2fd4286120b3d47f0a35a90486c216119bd40a02a28680f6f5c95",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -70,7 +70,7 @@
       "location" : "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
       "state" : {
         "branch" : "main",
-        "revision" : "7be7b3bd2cebb19ee119ba1f972ecce581de5aeb"
+        "revision" : "f32aa2c2768c9e3512e5275a2c06e3b5ce41d608"
       }
     },
     {
@@ -92,6 +92,15 @@
       }
     },
     {
+      "identity" : "githubservices",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mx-Iris/GitHubServices",
+      "state" : {
+        "branch" : "main",
+        "revision" : "bd7c3ea36ebf6c2441269d0eb938ceca017d8d5b"
+      }
+    },
+    {
       "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
@@ -107,6 +116,15 @@
       "state" : {
         "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
         "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "launchatlogin-modern",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
+      "state" : {
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc",
+        "version" : "1.1.0"
       }
     },
     {

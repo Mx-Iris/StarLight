@@ -1,10 +1,3 @@
-//
-//  MainCoordinator.swift
-//  StarLight
-//
-//  Created by JH on 2025/1/1.
-//
-
 import AppKit
 import UIFoundation
 import CocoaCoordinator
@@ -17,15 +10,14 @@ enum SettingsRoute: Routable {
 typealias SettingsTransition = SceneTransition<SettingsWindowController, SettingsViewController>
 
 final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransition> {
-    
     protocol Delegate: AnyObject {
         func settingsCoordinatorDidLogout(_ coordinator: SettingsCoordinator)
     }
-    
+
     let appServices: AppServices
 
     var delegate: Delegate?
-    
+
     init(appServices: AppServices) {
         self.appServices = appServices
         super.init(windowController: .init(), initialRoute: nil)
@@ -41,14 +33,14 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
             return .close()
         }
     }
-    
+
     override func completeTransition(for route: SettingsRoute) {
         switch route {
-        case .logout:
-            delegate?.settingsCoordinatorDidLogout(self)
         case .settings:
             NSApp.setActivationPolicy(.regular)
             NSApp.activate(ignoringOtherApps: true)
+        case .logout:
+            delegate?.settingsCoordinatorDidLogout(self)
         }
     }
 }

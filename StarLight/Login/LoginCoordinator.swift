@@ -38,7 +38,8 @@ final class LoginCoordinator: SceneCoordinator<LoginRoute, LoginTransition> {
         super.completeTransition(for: route)
         switch route {
         case .login:
-            break
+            NSApp.setActivationPolicy(.regular)
+            NSApp.activate(ignoringOtherApps: true)
         case .logged:
             delegate?.loginCoordinatorDidLogin(self)
         }

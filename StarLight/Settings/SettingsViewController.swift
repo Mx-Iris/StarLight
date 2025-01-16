@@ -1,31 +1,14 @@
-//
-//  MainView.swift
-//  StarLight
-//
-//  Created by JH on 2025/1/3.
-//
-
 import Foundation
-import SwiftUI
 import KeyboardShortcuts
-import Luminare
 import LaunchAtLogin
+import Luminare
+import SwiftUI
 
-class TestSettingsCoordinator: TestCoordinator<SettingsRoute> {
-    
-}
-
-
-final class SettingsViewModel: ViewModel<SettingsRoute>, ObservableObject {
-    func logout() {
-        appServices.loginService.logout()
-        router.trigger(.logout)
-    }
-}
-
+class TestSettingsCoordinator: TestCoordinator<SettingsRoute> {}
 
 final class SettingsViewController: XiblessHostingController<SettingsView> {
     let viewModel: SettingsViewModel
+
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
         super.init(rootView: .init(viewModel: viewModel))
@@ -35,19 +18,28 @@ final class SettingsViewController: XiblessHostingController<SettingsView> {
 struct SettingsView: View {
     @ObservedObject
     var viewModel: SettingsViewModel
-    
+
     var body: some View {
         VStack {
             Form {
                 Section {
                     KeyboardShortcuts.Recorder("StarLight Hotkeys", name: .main)
+
                     Toggle(isOn: Settings.$showRepositoryDescription) {
                         Text("Show Repository Description")
                     }
+
                     Toggle(isOn: Settings.$showSettingsOnLaunch) {
                         Text("Show Settings on Launch")
                     }
+
                     LaunchAtLogin.Toggle()
+
+                    Stepper(value: viewModel.refreshIntervalBinding, format: .number) {
+                        Text("Repositories Refresh Interval (minutes)")
+                    }
+                    
+
                 } footer: {
                     HStack {
                         Spacer()
@@ -59,7 +51,6 @@ struct SettingsView: View {
                         .buttonStyle(LuminareCompactButtonStyle())
                         Spacer()
                     }
-                    
                 }
             }
             .formStyle(.grouped)

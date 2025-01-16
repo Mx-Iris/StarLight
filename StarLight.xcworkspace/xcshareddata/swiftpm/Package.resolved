@@ -1,5 +1,5 @@
 {
-  "originHash" : "796d0b2e5be2fd4286120b3d47f0a35a90486c216119bd40a02a28680f6f5c95",
+  "originHash" : "46454de49f49dd712d6c9195a3a195f64d28e814c5b7738c72e89e1b093254c8",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -89,15 +89,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "dd7d12487d637c71707597a75be84ee3c11f86f9"
-      }
-    },
-    {
-      "identity" : "githubservices",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Mx-Iris/GitHubServices",
-      "state" : {
-        "branch" : "main",
-        "revision" : "bd7c3ea36ebf6c2441269d0eb938ceca017d8d5b"
       }
     },
     {

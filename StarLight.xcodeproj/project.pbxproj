@@ -16,6 +16,8 @@
 		E9339F972D282B39005AEA76 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F962D282B39005AEA76 /* SettingsViewController.swift */; };
 		E9339F992D282BE2005AEA76 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */; };
 		E9339F9B2D282C12005AEA76 /* XiblessHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */; };
+		E975C5C62D392E8B0059BE92 /* TestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C5C52D392E8B0059BE92 /* TestCoordinator.swift */; };
+		E975C5CF2D3937280059BE92 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */; };
 		E9794A652D22E54000AAA0C7 /* StarLightUI in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A642D22E54000AAA0C7 /* StarLightUI */; };
 		E9794A672D22E6E900AAA0C7 /* StarLightCore in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A662D22E6E900AAA0C7 /* StarLightCore */; };
 		E9794A692D22E70A00AAA0C7 /* StarLightUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A682D22E70A00AAA0C7 /* StarLightUtilities */; };
@@ -45,6 +47,8 @@
 		E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XiblessHostingController.swift; sourceTree = "<group>"; };
 		E94CDF912D227DE5005B69BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E975C5C52D392E8B0059BE92 /* TestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoordinator.swift; sourceTree = "<group>"; };
+		E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		E9E06A042D23E897008055CE /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		E9E06A052D23E897008055CE /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E9E06A062D23E897008055CE /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -100,27 +104,69 @@
 			isa = PBXGroup;
 			children = (
 				E94CDF912D227DE5005B69BA /* Info.plist */,
-				E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */,
-				E9E06A0E2D23E937008055CE /* AppServices.swift */,
-				E9E06A102D23E95E008055CE /* AppCoordinator.swift */,
-				E9E90AEF2D2A5AF4001607C9 /* AppStatusItemController.swift */,
-				E9339F682D2811BD005AEA76 /* MainCoordinator.swift */,
-				E9E06A0C2D23E913008055CE /* ViewModel.swift */,
-				E9E06A042D23E897008055CE /* LoginCoordinator.swift */,
-				E9E06A052D23E897008055CE /* LoginViewController.swift */,
-				E9E06A062D23E897008055CE /* LoginViewModel.swift */,
-				E9E06A072D23E897008055CE /* LoginWindowController.swift */,
-				E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */,
-				E9E90AED2D2A5A03001607C9 /* Settings.swift */,
-				E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */,
-				E9339F962D282B39005AEA76 /* SettingsViewController.swift */,
-				E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */,
-				E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */,
+				E975C5CB2D3936DC0059BE92 /* App */,
+				E975C5CD2D3936F30059BE92 /* Base */,
+				E975C5CC2D3936E70059BE92 /* Main */,
+				E975C5C92D3936BE0059BE92 /* Login */,
+				E975C5CA2D3936C50059BE92 /* Settings */,
 				E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */,
 				E91AE1E02D218FAF0076BD59 /* MainMenu.xib */,
 				E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */,
 			);
 			path = StarLight;
+			sourceTree = "<group>";
+		};
+		E975C5C92D3936BE0059BE92 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				E9E06A042D23E897008055CE /* LoginCoordinator.swift */,
+				E9E06A072D23E897008055CE /* LoginWindowController.swift */,
+				E9E06A052D23E897008055CE /* LoginViewController.swift */,
+				E9E06A062D23E897008055CE /* LoginViewModel.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		E975C5CA2D3936C50059BE92 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */,
+				E9E90AED2D2A5A03001607C9 /* Settings.swift */,
+				E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */,
+				E9339F962D282B39005AEA76 /* SettingsViewController.swift */,
+				E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E975C5CB2D3936DC0059BE92 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */,
+				E9E06A0E2D23E937008055CE /* AppServices.swift */,
+				E9E06A102D23E95E008055CE /* AppCoordinator.swift */,
+				E9E90AEF2D2A5AF4001607C9 /* AppStatusItemController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E975C5CC2D3936E70059BE92 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				E9339F682D2811BD005AEA76 /* MainCoordinator.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		E975C5CD2D3936F30059BE92 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				E9E06A0C2D23E913008055CE /* ViewModel.swift */,
+				E975C5C52D392E8B0059BE92 /* TestCoordinator.swift */,
+				E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */,
+				E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,6 +253,7 @@
 				E9339F992D282BE2005AEA76 /* SettingsWindowController.swift in Sources */,
 				E9E06A082D23E897008055CE /* LoginViewController.swift in Sources */,
 				E9E06A0F2D23E937008055CE /* AppServices.swift in Sources */,
+				E975C5C62D392E8B0059BE92 /* TestCoordinator.swift in Sources */,
 				E9339F9B2D282C12005AEA76 /* XiblessHostingController.swift in Sources */,
 				E9E06A092D23E897008055CE /* LoginViewModel.swift in Sources */,
 				E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */,
@@ -218,6 +265,7 @@
 				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
 				E913AE792D25993C0027ACA1 /* SettingsCoordinator.swift in Sources */,
 				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,
+				E975C5CF2D3937280059BE92 /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,30 +1,28 @@
 import AppKit
 import SwiftUI
 import Luminare
+import StarLightUI
 
 final class LoginViewController: XiblessHostingController<LoginView> {
     let viewModel: LoginViewModel
 
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
-        var loginView = LoginView()
-        loginView.loginButtonClicked = { [weak viewModel] in
-            guard let viewModel else { return }
-            viewModel.login()
-        }
-        super.init(rootView: loginView)
+        super.init(rootView: .init(viewModel: viewModel))
     }
 }
 
 struct LoginView: View {
-    var loginButtonClicked: (() -> Void)?
+    @ObservedObject
+    var viewModel: LoginViewModel
 
     var body: some View {
         VStack(spacing: 30) {
             Text("Welcome to StarLight")
                 .font(.largeTitle)
-            Button {
-                loginButtonClicked?()
+
+            AsyncButton {
+                try await viewModel.login()
             } label: {
                 Text("Login")
             }
@@ -34,6 +32,8 @@ struct LoginView: View {
     }
 }
 
+class TestLoginCoordinator: TestCoordinator<LoginRoute> {}
+
 #Preview {
-    LoginView(loginButtonClicked: nil)
+    LoginView(viewModel: .init(appServices: .init(), router: TestLoginCoordinator(initialRoute: nil)))
 }

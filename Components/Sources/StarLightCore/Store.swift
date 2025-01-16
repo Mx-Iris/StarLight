@@ -11,7 +11,6 @@ import GitHubModels
 import GitHubNetworking
 
 public final class Store: @unchecked Sendable {
-
     public var repositories: [Repository] {
         get async throws {
             if state == .idle {
@@ -28,8 +27,7 @@ public final class Store: @unchecked Sendable {
             }
         }
     }
-    
-    
+
     private var _repositories: [Repository] = []
 
     private var client: GitHubClient
@@ -37,16 +35,23 @@ public final class Store: @unchecked Sendable {
     private var tokenCancellable: AnyCancellable?
 
     public private(set) var state: State = .idle
-    
+
     public var completion: (([Repository]) -> Void)?
-    
-    
+
+    public var refreshInterval: TimeInterval = 15 {
+        didSet {
+            reloadRefreshTimer()
+        }
+    }
+
+    private var refreshTimer: Timer?
+
     public enum State {
         case idle
         case fetching
         case loading
     }
-    
+
     public init() {
         self.client = .init(token: KeychainStorage.token)
         self.tokenCancellable = KeychainStorage.$token.sink { [weak self] token in
@@ -69,10 +74,25 @@ public final class Store: @unchecked Sendable {
                 print(error)
             }
         }
+        reloadRefreshTimer()
+    }
+
+    private func reloadRefreshTimer() {
+        refreshTimer?.invalidate()
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshInterval * 60, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            Task {
+                do {
+                    try await self.fetchRepositories()
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
 
     public func test() {}
-    
+
     public func fetchRepositories() async throws {
         guard state == .idle else { return }
         state = .fetching
@@ -85,8 +105,7 @@ public final class Store: @unchecked Sendable {
         }
         try await saveRepositories()
     }
-    
-    
+
     private func loadRepositories() async throws {
         guard state == .idle else { return }
         state = .loading
@@ -106,7 +125,7 @@ public final class Store: @unchecked Sendable {
             completion = nil
         }
     }
-    
+
     private func saveRepositories() async throws {
         try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.global().async {
@@ -119,9 +138,8 @@ public final class Store: @unchecked Sendable {
             }
         }
     }
-    
+
     private var storageURL: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "Repositories.json")
     }
-    
 }

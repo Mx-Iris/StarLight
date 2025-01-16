@@ -13,18 +13,10 @@ import GitHubNetworking
 public final class Store: @unchecked Sendable {
     public var repositories: [Repository] {
         get async throws {
-            if state == .idle {
-                if _repositories.isEmpty {
-                    try await fetchRepositories()
-                }
-                return _repositories
-            } else {
-                return await withCheckedContinuation { continuation in
-                    completion = {
-                        continuation.resume(returning: $0)
-                    }
-                }
+            if _repositories.isEmpty {
+                try await fetchRepositories()
             }
+            return _repositories
         }
     }
 
@@ -91,18 +83,12 @@ public final class Store: @unchecked Sendable {
         }
     }
 
-    public func test() {}
-
-    public func fetchRepositories() async throws {
+    private func fetchRepositories() async throws {
         guard state == .idle else { return }
         state = .fetching
         defer { state = .idle }
         let user = try await client.authenticatedUser()
         _repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
-        await MainActor.run {
-            completion?(_repositories)
-            completion = nil
-        }
         try await saveRepositories()
     }
 
@@ -119,10 +105,6 @@ public final class Store: @unchecked Sendable {
                     continuation.resume(throwing: error)
                 }
             }
-        }
-        await MainActor.run {
-            completion?(_repositories)
-            completion = nil
         }
     }
 

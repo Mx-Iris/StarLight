@@ -92,6 +92,15 @@
       }
     },
     {
+      "identity" : "githubservices",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mx-Iris/GitHubServices",
+      "state" : {
+        "branch" : "main",
+        "revision" : "bd7c3ea36ebf6c2441269d0eb938ceca017d8d5b"
+      }
+    },
+    {
       "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",

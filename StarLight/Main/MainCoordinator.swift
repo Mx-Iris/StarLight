@@ -65,7 +65,7 @@ final class QuickActionBarController: NSObject {
 
     func present() {
         quickActionBar.cancel()
-        quickActionBar.present(placeholderText: "Search Starred Repositories")
+        quickActionBar.present(placeholderText: "Search Starred Repositories", width: Settings.windowWidth, height: Settings.windowHeight)
     }
 
     func cancel() {

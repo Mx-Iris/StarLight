@@ -39,22 +39,32 @@ struct SettingsView: View {
                         Text("Repositories Refresh Interval (minutes)")
                     }
                     
+                    HStack {
+                        
+                        Stepper("Width", value: Settings.$windowWidth, format: .number)
+                        
+                        Stepper("Height", value: Settings.$windowHeight, format: .number)
+                    }
 
                 } footer: {
-                    HStack {
-                        Spacer()
-                        Button {
-                            viewModel.logout()
-                        } label: {
-                            Text("Logout")
+                    VStack {
+                        Spacer(minLength: 20)
+                        HStack {
+                            Spacer()
+                            Button {
+                                viewModel.logout()
+                            } label: {
+                                Text("Logout")
+                            }
+                            .buttonStyle(LuminareCompactButtonStyle())
+                            .environment(\.luminareHorizontalPadding, 100)
+                            Spacer()
                         }
-                        .buttonStyle(LuminareCompactButtonStyle())
-                        Spacer()
                     }
                 }
             }
             .formStyle(.grouped)
-            .frame(width: 500, height: 300)
+            .frame(width: 500, height: 500)
         }
     }
 }

@@ -9,6 +9,7 @@ import AppKit
 import GitHubModels
 import CocoaCoordinator
 import StarLightCore
+import Defaults
 
 enum AppRoute: Routable {
     case login
@@ -18,24 +19,25 @@ enum AppRoute: Routable {
 
 final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
     let appServices: AppServices
+
     let mainCoordinator: MainCoordinator
+
     init(appServices: AppServices) {
         self.appServices = appServices
         self.mainCoordinator = MainCoordinator(appServices: appServices)
         var initialRoute: AppRoute?
         if appServices.loginService.hasLogin {
-            initialRoute = Settings.showSettingsOnLaunch ? .settings : nil
+            initialRoute = Defaults[.showSettingsOnLaunch] ? .settings : nil
         } else {
             initialRoute = .login
         }
-        
+
         if initialRoute == nil {
             NSApplication.shared.setActivationPolicy(.accessory)
         }
-        
+
         super.init(initialRoute: initialRoute)
-        
-    
+
         addChild(mainCoordinator)
     }
 

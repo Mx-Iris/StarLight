@@ -1,20 +1,14 @@
 import Foundation
 import SwiftUI
 import StarLightUtilities
+import Dependencies
+import Defaults
 
-enum Settings {
-    @AppStorage("showRepositoryDescription")
-    static var showRepositoryDescription: Bool = false
-
-    @AppStorage("showSettingsOnLaunch")
-    static var showSettingsOnLaunch: Bool = true
-    
-    @AppStorage("repositoriesRefreshInterval")
-    static var repositoriesRefreshInterval: TimeInterval = 15
-    
-    @AppStorage("windowWidth")
-    static var windowWidth: Double = (NSScreen.main?.frame.width ?? (640 * 4)) / 4.0
-    
-    @AppStorage("windowHeight")
-    static var windowHeight: Double = (NSScreen.main?.frame.height ?? (320 * 4)) / 4.0
+extension Defaults.Keys {
+    static let showRepositoryDescription = Defaults.Key("showRepositoryDescription", default: false)
+    static let showSettingsOnLaunch = Defaults.Key("showSettingsOnLaunch", default: true)
+    static let repositoriesRefreshInterval = Defaults.Key<Double>("repositoriesRefreshInterval", default: 15.0)
+    static let windowWidth = Defaults.Key<Double>("windowWidth", default: (NSScreen.main?.frame.width ?? (640 * 4)) / 4.0)
+    static let windowHeight = Defaults.Key<Double>("windowHeight", default: (NSScreen.main?.frame.height ?? (320 * 4)) / 4.0)
+    static let mainAction = Defaults.Key("mainAction", default: MainAction.openURL)
 }

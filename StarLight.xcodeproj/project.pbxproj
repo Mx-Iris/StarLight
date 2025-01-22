@@ -11,6 +11,8 @@
 		E91AE1E32D218FAF0076BD59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */; };
 		E91AE1E42D218FAF0076BD59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */; };
 		E91AE1E52D218FAF0076BD59 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1E02D218FAF0076BD59 /* MainMenu.xib */; };
+		E929DE732D414389009F4020 /* MainActionBarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E929DE722D414389009F4020 /* MainActionBarCellView.swift */; };
+		E929DE752D4143B1009F4020 /* MainActionBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E929DE742D4143B1009F4020 /* MainActionBarController.swift */; };
 		E9339F692D2811BD005AEA76 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F682D2811BD005AEA76 /* MainCoordinator.swift */; };
 		E9339F952D282B09005AEA76 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */; };
 		E9339F972D282B39005AEA76 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F962D282B39005AEA76 /* SettingsViewController.swift */; };
@@ -40,6 +42,8 @@
 		E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E91AE1DF2D218FAF0076BD59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StarLight.entitlements; sourceTree = "<group>"; };
+		E929DE722D414389009F4020 /* MainActionBarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionBarCellView.swift; sourceTree = "<group>"; };
+		E929DE742D4143B1009F4020 /* MainActionBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionBarController.swift; sourceTree = "<group>"; };
 		E932BA652D22CA8F0052C3EE /* Components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Components; sourceTree = "<group>"; };
 		E9339F682D2811BD005AEA76 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				E9339F682D2811BD005AEA76 /* MainCoordinator.swift */,
+				E929DE742D4143B1009F4020 /* MainActionBarController.swift */,
+				E929DE722D414389009F4020 /* MainActionBarCellView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -262,7 +268,9 @@
 				E9339F952D282B09005AEA76 /* KeyboardShortcuts.swift in Sources */,
 				E9339F692D2811BD005AEA76 /* MainCoordinator.swift in Sources */,
 				E9E90AF02D2A5AF4001607C9 /* AppStatusItemController.swift in Sources */,
+				E929DE732D414389009F4020 /* MainActionBarCellView.swift in Sources */,
 				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
+				E929DE752D4143B1009F4020 /* MainActionBarController.swift in Sources */,
 				E913AE792D25993C0027ACA1 /* SettingsCoordinator.swift in Sources */,
 				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,
 				E975C5CF2D3937280059BE92 /* SettingsViewModel.swift in Sources */,

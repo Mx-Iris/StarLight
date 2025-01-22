@@ -3,8 +3,8 @@ import KeyboardShortcuts
 import LaunchAtLogin
 import Luminare
 import SwiftUI
-
-class TestSettingsCoordinator: TestCoordinator<SettingsRoute> {}
+import Dependencies
+import Defaults
 
 final class SettingsViewController: XiblessHostingController<SettingsView> {
     let viewModel: SettingsViewModel
@@ -19,31 +19,60 @@ struct SettingsView: View {
     @ObservedObject
     var viewModel: SettingsViewModel
 
+    @Default(.mainAction)
+    var mainAction
+
+    @Default(.windowWidth)
+    var windowWidth
+
+    @Default(.windowHeight)
+    var windowHeight
+
+    @Default(.showSettingsOnLaunch)
+    var showSettingsOnLaunch
+
+    @Default(.showRepositoryDescription)
+    var showRepositoryDescription
+
+    @Default(.repositoriesRefreshInterval)
+    var repositoriesRefreshInterval
+
     var body: some View {
         VStack {
             Form {
                 Section {
                     KeyboardShortcuts.Recorder("StarLight Hotkeys", name: .main)
 
-                    Toggle(isOn: Settings.$showRepositoryDescription) {
+                    Toggle(isOn: $showRepositoryDescription) {
                         Text("Show Repository Description")
                     }
 
-                    Toggle(isOn: Settings.$showSettingsOnLaunch) {
+                    Toggle(isOn: $showSettingsOnLaunch) {
                         Text("Show Settings on Launch")
                     }
 
                     LaunchAtLogin.Toggle()
 
-                    Stepper(value: viewModel.refreshIntervalBinding, format: .number) {
+                    Stepper(value: $repositoriesRefreshInterval, format: .number) {
                         Text("Repositories Refresh Interval (minutes)")
                     }
-                    
+                    .onChange(of: repositoriesRefreshInterval) { newValue in
+                        viewModel.appServices.store.refreshInterval = newValue
+                    }
+
                     HStack {
-                        
-                        Stepper("Width", value: Settings.$windowWidth, format: .number)
-                        
-                        Stepper("Height", value: Settings.$windowHeight, format: .number)
+                        Stepper("Width", value: $windowWidth, format: .number)
+
+                        Stepper("Height", value: $windowHeight, format: .number)
+                    }
+
+                    Picker("Main Action", selection: $mainAction) {
+                        Text("Open URL")
+                            .tag(MainAction.openURL)
+                        Text("Copy URL")
+                            .tag(MainAction.copyURL)
+                        Text("Open and Copy URL")
+                            .tag(MainAction.openAndCopyURL)
                     }
 
                 } footer: {
@@ -68,6 +97,8 @@ struct SettingsView: View {
         }
     }
 }
+
+class TestSettingsCoordinator: TestCoordinator<SettingsRoute> {}
 
 #Preview {
     SettingsView(viewModel: .init(appServices: .init(), router: TestSettingsCoordinator(initialRoute: nil)))

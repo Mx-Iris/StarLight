@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     lazy var appCoordinator = AppCoordinator(appServices: appServices)
     
-    lazy var statusItemController = AppStatusItemController(router: appCoordinator)
+    lazy var statusItemController = AppStatusItemController(appServices: appServices, router: appCoordinator)
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         _ = appCoordinator

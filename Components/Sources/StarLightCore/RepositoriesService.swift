@@ -1,10 +1,145 @@
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+//
+//  Store.swift
+//  StarLight
+//
+//  Created by JH on 2024/12/29.
+//
 
-import AppKit
+import Foundation
+import Combine
+import GitHubModels
+import GitHubNetworking
 
-class RepositoriesService {
+public final class RepositoriesService: @unchecked Sendable {
+    public var repositories: [Repository] {
+        get async throws {
+            if let fetchRepositoriesTask, !fetchRepositoriesTask.isCancelled {
+                return try await fetchRepositoriesTask.value
+            } else if _repositories.isEmpty {
+                return try await runFetchRepositoriesTask().value
+            } else {
+                return _repositories
+            }
+        }
+    }
+
+    private var _repositories: [Repository] = []
+
+    private var client: GitHubClient
+
+    private var tokenCancellable: AnyCancellable?
+
+    @Published
+    public private(set) var state: State = .idle
+
+    public var completion: (([Repository]) -> Void)?
+
+    public var refreshInterval: TimeInterval = 15 {
+        didSet {
+            reloadRefreshTimer()
+        }
+    }
+
+    private var refreshTimer: Timer?
+
+    public enum State {
+        case idle
+        case fetching
+        case loading
+    }
+
+    public init() {
+        self.client = .init(token: KeychainStorage.token)
+        self.tokenCancellable = KeychainStorage.$token.sink { [weak self] token in
+            guard let self else { return }
+            self.client = .init(token: token)
+            if token != nil {
+                runFetchRepositoriesTask()
+            }
+        }
+        Task {
+            do {
+                try await loadRepositories()
+            } catch {
+                print(error)
+            }
+        }
+        reloadRefreshTimer()
+    }
+
+    public func refresh() {
+        runFetchRepositoriesTask()
+    }
     
+    private func reloadRefreshTimer() {
+        refreshTimer?.invalidate()
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshInterval * 60, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            runFetchRepositoriesTask()
+        }
+    }
+
+    private var fetchRepositoriesTask: Task<[Repository], Error>?
+
+    @discardableResult
+    private func runFetchRepositoriesTask() -> Task<[Repository], Error> {
+        if let fetchRepositoriesTask, !fetchRepositoriesTask.isCancelled {
+            return fetchRepositoriesTask
+        }
+        let task: Task<[Repository], Error> = Task {
+            do {
+                return try await fetchRepositories()
+            } catch {
+                print(error)
+                throw error
+            }
+        }
+        fetchRepositoriesTask = task
+        return task
+    }
+
+    private func fetchRepositories() async throws -> [Repository] {
+        state = .fetching
+        defer {
+            state = .idle
+            fetchRepositoriesTask = nil
+        }
+        let user = try await client.authenticatedUser()
+        let repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
+        try await saveRepositories()
+        _repositories = repositories
+        return repositories
+    }
     
+    private func loadRepositories() async throws {
+        state = .loading
+        defer { state = .idle }
+        _repositories = try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global().async {
+                do {
+                    let repositories = try JSONDecoder().decode([Repository].self, from: Data(contentsOf: self.storageURL))
+                    continuation.resume(returning: repositories)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
+    private func saveRepositories() async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global().async {
+                do {
+                    try JSONEncoder().encode(self._repositories).write(to: self.storageURL)
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
+    private var storageURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "Repositories.json")
+    }
 }
-
-#endif

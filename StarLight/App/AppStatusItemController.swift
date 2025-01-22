@@ -6,17 +6,53 @@
 //
 
 import AppKit
+import Combine
 import SFSymbol
 import MenuBuilder
 import StatusItemController
 import CocoaCoordinator
 
 final class AppStatusItemController: StatusItemController {
-    unowned let router: any Router<AppRoute>
+    private let appServices: AppServices
+    private unowned let router: any Router<AppRoute>
+    private var repositoriesServiceToken: AnyCancellable?
 
-    init(router: any Router<AppRoute>) {
+    private lazy var progressView: NSProgressIndicator = {
+        let progressView = NSProgressIndicator()
+        progressView.isIndeterminate = true
+        progressView.style = .spinning
+        progressView.controlSize = .small
+        return progressView
+    }()
+
+    init(appServices: AppServices, router: any Router<AppRoute>) {
+        self.appServices = appServices
         self.router = router
         super.init(image: .symbol(systemName: .starFill))
+        self.repositoriesServiceToken = appServices.store.$state
+            .receive(on: RunLoop.main)
+            .sink { [weak self] state in
+                guard let self, let button = statusItem.button else { return }
+                switch state {
+                case .idle:
+                    progressView.removeFromSuperview()
+                    progressView.stopAnimation(nil)
+                    button.image = .symbol(systemName: .starFill)
+                    print(button.frame)
+                default:
+                    progressView.sizeToFit()
+                    print(button.frame)
+                    button.frame = .init(origin: .zero, size: .init(width: 110, height: 22))
+                    print(button.frame)
+                    button.addSubview(progressView)
+                    NSLayoutConstraint.activate([
+                        progressView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+                        progressView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+                    ])
+                    progressView.startAnimation(nil)
+                    button.image = nil
+                }
+            }
     }
 
     override func buildMenu() -> NSMenu {
@@ -33,16 +69,18 @@ final class AppStatusItemController: StatusItemController {
                     router.trigger(.settings)
                 }
             SeparatorItem()
+            MenuItem("Refresh")
+                .onSelect { [weak self] in
+                    guard let self else { return }
+                    appServices.store.refresh()
+                }
+            SeparatorItem()
             MenuItem("Quit")
                 .onSelect(target: self, action: #selector(quit))
         }
     }
 
     override func leftClickAction() {
-        router.trigger(.main)
-    }
-
-    override func rightClickAction() {
         openMenu()
     }
 }

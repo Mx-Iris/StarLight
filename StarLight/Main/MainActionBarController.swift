@@ -67,7 +67,7 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
 
     func copyURL(for repository: Repository) {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(repository.htmlURL.path(), forType: .string)
+        NSPasteboard.general.setString(repository.htmlURL.absoluteString, forType: .string)
     }
 
     func openURL(for repository: Repository) {

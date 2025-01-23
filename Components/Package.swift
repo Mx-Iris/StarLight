@@ -90,10 +90,6 @@ let package = Package(
             url: "https://github.com/sindresorhus/LaunchAtLogin-Modern",
             .upToNextMajor(from: "1.0.0")
         ),
-        .package(
-            url: "https://github.com/pointfreeco/swift-dependencies",
-            .upToNextMajor(from: "1.0.0")
-        )
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -128,7 +124,6 @@ let package = Package(
                 .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
                 .product(name: "LaunchAtLogin", package: "LaunchAtLogin-Modern"),
-                .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),
         .target(

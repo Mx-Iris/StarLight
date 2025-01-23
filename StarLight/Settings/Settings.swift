@@ -1,8 +1,7 @@
 import Foundation
 import SwiftUI
-import StarLightUtilities
-import Dependencies
 import Defaults
+import StarLightUtilities
 
 extension Defaults.Keys {
     static let showRepositoryDescription = Defaults.Key("showRepositoryDescription", default: false)

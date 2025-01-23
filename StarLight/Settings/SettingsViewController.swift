@@ -3,7 +3,6 @@ import KeyboardShortcuts
 import LaunchAtLogin
 import Luminare
 import SwiftUI
-import Dependencies
 import Defaults
 
 final class SettingsViewController: XiblessHostingController<SettingsView> {

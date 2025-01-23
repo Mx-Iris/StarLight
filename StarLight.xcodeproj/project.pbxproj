@@ -134,8 +134,8 @@
 		E975C5CA2D3936C50059BE92 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */,
 				E9E90AED2D2A5A03001607C9 /* Settings.swift */,
+				E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */,
 				E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */,
 				E9339F962D282B39005AEA76 /* SettingsViewController.swift */,
 				E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */,
@@ -431,7 +431,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -461,7 +461,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

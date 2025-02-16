@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apollographql/apollo-ios.git",
       "state" : {
-        "revision" : "9ec4b0b87c2f4214055b5dcac926b0a1dbfd7932",
-        "version" : "1.16.1"
+        "revision" : "e98e9d3b398b6005149074d51b097e31aaa44f63",
+        "version" : "1.17.0"
       }
     },
     {
@@ -89,15 +89,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "dd7d12487d637c71707597a75be84ee3c11f86f9"
-      }
-    },
-    {
-      "identity" : "githubservices",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Mx-Iris/GitHubServices",
-      "state" : {
-        "branch" : "main",
-        "revision" : "bd7c3ea36ebf6c2441269d0eb938ceca017d8d5b"
       }
     },
     {
@@ -322,7 +313,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "3588f0449f1592a5c746079a5c7e6c8b62ba55eb"
+        "revision" : "e62a44fd1f2764ba8807db3b6f257627449bbb8c"
       }
     },
     {

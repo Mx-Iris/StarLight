@@ -56,7 +56,7 @@ struct SettingsView: View {
                         Text("Repositories Refresh Interval (minutes)")
                     }
                     .onChange(of: repositoriesRefreshInterval) { newValue in
-                        viewModel.appServices.store.refreshInterval = newValue
+                        viewModel.appServices.repositoriesService.refreshInterval = newValue
                     }
 
                     HStack {

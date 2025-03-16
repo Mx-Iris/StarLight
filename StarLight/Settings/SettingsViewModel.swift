@@ -5,9 +5,9 @@ import CocoaCoordinator
 final class SettingsViewModel: ViewModel<SettingsRoute>, ObservableObject {
     var refreshIntervalBinding: Binding<TimeInterval> {
         .init {
-            self.appServices.store.refreshInterval
+            self.appServices.repositoriesService.refreshInterval
         } set: {
-            self.appServices.store.refreshInterval = $0
+            self.appServices.repositoriesService.refreshInterval = $0
         }
     }
 

@@ -29,7 +29,7 @@ final class AppStatusItemController: StatusItemController {
         self.appServices = appServices
         self.router = router
         super.init(image: .symbol(systemName: .starFill))
-        self.repositoriesServiceToken = appServices.store.$state
+        self.repositoriesServiceToken = appServices.repositoriesService.$state
             .receive(on: RunLoop.main)
             .sink { [weak self] state in
                 guard let self, let button = statusItem.button else { return }
@@ -38,12 +38,9 @@ final class AppStatusItemController: StatusItemController {
                     progressView.removeFromSuperview()
                     progressView.stopAnimation(nil)
                     button.image = .symbol(systemName: .starFill)
-                    print(button.frame)
                 default:
                     progressView.sizeToFit()
-                    print(button.frame)
                     button.frame = .init(origin: .zero, size: .init(width: 110, height: 22))
-                    print(button.frame)
                     button.addSubview(progressView)
                     NSLayoutConstraint.activate([
                         progressView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
@@ -72,7 +69,7 @@ final class AppStatusItemController: StatusItemController {
             MenuItem("Refresh")
                 .onSelect { [weak self] in
                     guard let self else { return }
-                    appServices.store.refresh()
+                    appServices.repositoriesService.refresh()
                 }
             SeparatorItem()
             MenuItem("Quit")

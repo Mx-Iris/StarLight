@@ -11,7 +11,7 @@ import StarLightCore
 final class AppServices {
     let loginService = LoginService()
     
-    let store = RepositoriesService()
+    let repositoriesService = RepositoriesService()
     
     init() {}
 }

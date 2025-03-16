@@ -40,9 +40,9 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
     }
 
     func quickActionBar(_ quickActionBar: DSFQuickActionBar, itemsForSearchTermTask task: DSFQuickActionBar.SearchTask) {
-        Task {
+        Task.detached { [self] in
             do {
-                let repositories = try await appServices.store.repositories
+                let repositories = try await appServices.repositoriesService.repositories
                 await MainActor.run {
                     task.complete(with: repositories.filter { $0.name.localizedCaseInsensitiveContains(task.searchTerm) })
                 }

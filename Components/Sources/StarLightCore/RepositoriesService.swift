@@ -57,7 +57,7 @@ public final class RepositoriesService: @unchecked Sendable {
                 runFetchRepositoriesTask()
             }
         }
-        Task {
+        Task.detached { [self] in
             do {
                 try await loadRepositories()
             } catch {
@@ -70,7 +70,7 @@ public final class RepositoriesService: @unchecked Sendable {
     public func refresh() {
         runFetchRepositoriesTask()
     }
-    
+
     private func reloadRefreshTimer() {
         refreshTimer?.invalidate()
         refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshInterval * 60, repeats: true) { [weak self] _ in
@@ -106,37 +106,19 @@ public final class RepositoriesService: @unchecked Sendable {
         }
         let user = try await client.authenticatedUser()
         let repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
-        try await saveRepositories()
         _repositories = repositories
+        try await saveRepositories()
         return repositories
     }
-    
+
     private func loadRepositories() async throws {
         state = .loading
         defer { state = .idle }
-        _repositories = try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global().async {
-                do {
-                    let repositories = try JSONDecoder().decode([Repository].self, from: Data(contentsOf: self.storageURL))
-                    continuation.resume(returning: repositories)
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        _repositories = try JSONDecoder().decode([Repository].self, from: Data(contentsOf: storageURL))
     }
 
     private func saveRepositories() async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global().async {
-                do {
-                    try JSONEncoder().encode(self._repositories).write(to: self.storageURL)
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        try JSONEncoder().encode(_repositories).write(to: storageURL)
     }
 
     private var storageURL: URL {

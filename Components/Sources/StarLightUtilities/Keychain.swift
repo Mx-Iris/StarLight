@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import KeychainAccess
+import FoundationToolbox
 
 @propertyWrapper
 public struct Keychain<T: Codable> {
@@ -40,6 +41,7 @@ public struct Keychain<T: Codable> {
         }
     }
 
+    @RecursiveLock
     private var _cacheWrappedValue: T?
     
     private let defaultValue: T

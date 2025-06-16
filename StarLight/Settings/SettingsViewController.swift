@@ -85,7 +85,7 @@ struct SettingsView: View {
                                 Text("Logout")
                             }
                             .buttonStyle(LuminareCompactButtonStyle())
-                            .environment(\.luminareHorizontalPadding, 100)
+//                            .environment(\.luminareHorizontalPadding, 100)
                             Spacer()
                         }
                     }

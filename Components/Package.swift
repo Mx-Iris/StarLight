@@ -56,11 +56,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Mx-Iris/UIFoundation",
-            branch: "main"
+            from: "0.2.0"
         ),
         .package(
-            url: "https://github.com/MxIris-macOS-Library-Forks/Luminare",
-            branch: "main"
+            url: "https://github.com/MrKai77/Luminare",
+            from: "0.1.0"
         ),
         .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
@@ -68,27 +68,27 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/sindresorhus/KeyboardShortcuts",
-            .upToNextMajor(from: "2.0.0")
+            from: "2.0.0"
         ),
         .package(
             url: "https://github.com/SDWebImage/SDWebImageSwiftUI",
-            .upToNextMajor(from: "3.0.0")
+            from: "3.0.0"
         ),
         .package(
             url: "https://github.com/hexedbits/StatusItemController",
-            .upToNextMajor(from: "2.0.0")
+            from: "2.0.0"
         ),
         .package(
             url: "https://github.com/j-f1/MenuBuilder",
-            .upToNextMajor(from: "3.0.0")
+            from: "3.0.0"
         ),
         .package(
             url: "https://github.com/Mx-Iris/SFSymbol",
-            branch: "main"
+            from: "0.1.0"
         ),
         .package(
             url: "https://github.com/sindresorhus/LaunchAtLogin-Modern",
-            .upToNextMajor(from: "1.0.0")
+            from: "1.0.0"
         ),
     ],
     targets: [

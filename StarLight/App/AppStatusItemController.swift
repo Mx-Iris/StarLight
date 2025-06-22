@@ -29,27 +29,29 @@ final class AppStatusItemController: StatusItemController {
         self.appServices = appServices
         self.router = router
         super.init(image: .symbol(systemName: .starFill))
-        self.repositoriesServiceToken = appServices.repositoriesService.$state
-            .receive(on: RunLoop.main)
-            .sink { [weak self] state in
-                guard let self, let button = statusItem.button else { return }
-                switch state {
-                case .idle:
-                    progressView.removeFromSuperview()
-                    progressView.stopAnimation(nil)
-                    button.image = .symbol(systemName: .starFill)
-                default:
-                    progressView.sizeToFit()
-                    button.frame = .init(origin: .zero, size: .init(width: 110, height: 22))
-                    button.addSubview(progressView)
-                    NSLayoutConstraint.activate([
-                        progressView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
-                        progressView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-                    ])
-                    progressView.startAnimation(nil)
-                    button.image = nil
+        Task {
+            self.repositoriesServiceToken = await appServices.repositoriesService.$state
+                .receive(on: RunLoop.main)
+                .sink { [weak self] state in
+                    guard let self, let button = statusItem.button else { return }
+                    switch state {
+                    case .idle:
+                        progressView.removeFromSuperview()
+                        progressView.stopAnimation(nil)
+                        button.image = .symbol(systemName: .starFill)
+                    default:
+                        progressView.sizeToFit()
+                        button.frame = .init(origin: .zero, size: .init(width: 110, height: 22))
+                        button.addSubview(progressView)
+                        NSLayoutConstraint.activate([
+                            progressView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+                            progressView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+                        ])
+                        progressView.startAnimation(nil)
+                        button.image = nil
+                    }
                 }
-            }
+        }
     }
 
     override func buildMenu() -> NSMenu {
@@ -69,7 +71,9 @@ final class AppStatusItemController: StatusItemController {
             MenuItem("Refresh")
                 .onSelect { [weak self] in
                     guard let self else { return }
-                    appServices.repositoriesService.refresh()
+                    Task {
+                        await self.appServices.repositoriesService.refresh()
+                    }
                 }
             SeparatorItem()
             MenuItem("Quit")

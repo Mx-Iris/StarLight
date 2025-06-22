@@ -64,7 +64,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
-            branch: "main"
+            from: "0.3.0"
         ),
         .package(
             url: "https://github.com/sindresorhus/KeyboardShortcuts",

@@ -1,10 +1,3 @@
-//
-//  UserDefault.swift
-//  LocalizationStudioUtilities
-//
-//  Created by JH on 2024/8/1.
-//
-
 import Foundation
 import Combine
 import Defaults
@@ -31,16 +24,16 @@ public struct UserDefault<T: Codable> {
             }
         }
     }
-    
+
     @RecursiveLock
     private var _cacheWrappedValue: AnyDefaultSerializable<T>?
-    
+
     private let key: Defaults.Key<AnyDefaultSerializable<T>>
 
     public init(key: String = #function, suite: UserDefaults = .standard, defaultValue: T) {
         self.key = Defaults.Key(key, default: .init(wrappedValue: defaultValue), suite: suite)
     }
-    
+
     public var projectedValue: some Publisher<T, Never> {
         Defaults.publisher(key).map { $0.newValue.wrappedValue }.eraseToAnyPublisher()
     }

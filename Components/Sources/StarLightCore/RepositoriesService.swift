@@ -1,16 +1,9 @@
-//
-//  Store.swift
-//  StarLight
-//
-//  Created by JH on 2024/12/29.
-//
-
 import Foundation
 import Combine
 import GitHubModels
 import GitHubNetworking
 
-public final class RepositoriesService: @unchecked Sendable {
+public actor RepositoriesService {
     public var repositories: [Repository] {
         get async throws {
             if let fetchRepositoriesTask, !fetchRepositoriesTask.isCancelled {
@@ -50,12 +43,9 @@ public final class RepositoriesService: @unchecked Sendable {
 
     public init() {
         self.client = .init(token: KeychainStorage.token)
-        self.tokenCancellable = KeychainStorage.$token.sink { [weak self] token in
-            guard let self else { return }
-            self.client = .init(token: token)
-            if token != nil {
-                runFetchRepositoriesTask()
-            }
+        Task {
+            await observeTokenChanges()
+            await reloadRefreshTimer()
         }
         Task.detached { [self] in
             do {
@@ -64,9 +54,24 @@ public final class RepositoriesService: @unchecked Sendable {
                 print(error)
             }
         }
-        reloadRefreshTimer()
     }
 
+    private func observeTokenChanges() {
+        tokenCancellable = KeychainStorage.$token.sink { [weak self] token in
+            guard let self else { return }
+            Task {
+                await self.updateClient(for: token)
+            }
+        }
+    }
+    
+    private func updateClient(for token: Token?) {
+        self.client = .init(token: token)
+        if token != nil {
+            self.runFetchRepositoriesTask()
+        }
+    }
+    
     public func refresh() {
         runFetchRepositoriesTask()
     }
@@ -75,7 +80,9 @@ public final class RepositoriesService: @unchecked Sendable {
         refreshTimer?.invalidate()
         refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshInterval * 60, repeats: true) { [weak self] _ in
             guard let self else { return }
-            runFetchRepositoriesTask()
+            Task {
+                await self.runFetchRepositoriesTask()
+            }
         }
     }
 

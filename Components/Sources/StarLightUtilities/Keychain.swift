@@ -1,10 +1,3 @@
-//
-//  Keychain.swift
-//  LocalizationStudioUtilities
-//
-//  Created by JH on 2024/8/1.
-//
-
 import Foundation
 import Combine
 import KeychainAccess
@@ -15,7 +8,7 @@ public struct Keychain<T: Codable> {
     private let keychain: KeychainAccess.Keychain
 
     private let subject = PassthroughSubject<T, Never>()
-    
+
     public var wrappedValue: T {
         set {
             do {
@@ -43,7 +36,7 @@ public struct Keychain<T: Codable> {
 
     @RecursiveLock
     private var _cacheWrappedValue: T?
-    
+
     private let defaultValue: T
 
     private let key: String
@@ -53,7 +46,7 @@ public struct Keychain<T: Codable> {
         self.key = key
         self.defaultValue = defaultValue
     }
-    
+
     public var projectedValue: some Publisher<T, Never> {
         subject.eraseToAnyPublisher()
     }

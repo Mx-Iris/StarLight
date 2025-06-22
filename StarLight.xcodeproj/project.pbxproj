@@ -37,7 +37,7 @@
 
 /* Begin PBXFileReference section */
 		E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
-		E91AE1CD2D218FAA0076BD59 /* StarLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StarLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E91AE1CD2D218FAA0076BD59 /* StarLight-Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "StarLight-Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E91AE1DF2D218FAF0076BD59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		E91AE1CE2D218FAA0076BD59 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E91AE1CD2D218FAA0076BD59 /* StarLight.app */,
+				E91AE1CD2D218FAA0076BD59 /* StarLight-Debug.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,7 +198,7 @@
 				E9FA27672D295FFA008D9221 /* StarLightResources */,
 			);
 			productName = StarLight;
-			productReference = E91AE1CD2D218FAA0076BD59 /* StarLight.app */;
+			productReference = E91AE1CD2D218FAA0076BD59 /* StarLight-Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -434,7 +434,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.JH.StarLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME)-Debug";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -465,7 +465,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.JH.StarLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME)-Debug";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};

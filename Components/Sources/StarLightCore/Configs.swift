@@ -1,10 +1,3 @@
-//
-//  Configs.swift
-//  Components
-//
-//  Created by JH on 2025/1/3.
-//
-
 import Foundation
 import GitHubNetworking
 

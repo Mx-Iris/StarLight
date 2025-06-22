@@ -1,22 +1,17 @@
-//
-//  LoginService.swift
-//  Components
-//
-//  Created by JH on 2025/1/3.
-//
-
 import Foundation
 import GitHubNetworking
 @preconcurrency import AuthenticationServices
 
-public final class LoginService: @unchecked Sendable {
+public actor LoginService {
     public init() {}
 
+    @MainActor
     private var authSession: ASWebAuthenticationSession?
 
+    @MainActor
     private let presentationContextProvider = WebAuthenticationPresentationContextProvidingCoordinator()
 
-    public var hasLogin: Bool {
+    public nonisolated var hasLogin: Bool {
         KeychainStorage.token != nil
     }
 
@@ -29,11 +24,11 @@ public final class LoginService: @unchecked Sendable {
             DispatchQueue.main.async { [self] in
                 let authSession = ASWebAuthenticationSession(url: Configs.App.githubLoginURL, callbackURLScheme: Configs.App.urlScheme, completionHandler: { url, error in
                     if let code = url?.queryParameters?["code"] {
-                        GitHubClient.createAccessToken(clientId: Configs.App.githubID, clientSecret: Configs.App.githubSecrets, code: code, redirectURI: nil, state: nil) { result in
+                        GitHubClient.accessToken(clientID: Configs.App.githubID, clientSecret: Configs.App.githubSecrets, code: code, redirectURI: nil, state: nil) { result in
                             switch result {
-                            case let .success(token):
+                            case .success(let token):
                                 continuation.resume(returning: token)
-                            case let .failure(error):
+                            case .failure(let error):
                                 continuation.resume(throwing: error)
                             }
                         }
@@ -51,13 +46,13 @@ public final class LoginService: @unchecked Sendable {
             }
         }
     }
-    
-    public func logout() {
+
+    public nonisolated func logout() {
         KeychainStorage.token = nil
     }
 }
 
-private class WebAuthenticationPresentationContextProvidingCoordinator: NSObject, ASWebAuthenticationPresentationContextProviding {
+private final class WebAuthenticationPresentationContextProvidingCoordinator: NSObject, ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return NSApp.keyWindow ?? NSApp.mainWindow ?? NSApp.orderedWindows.first!
     }

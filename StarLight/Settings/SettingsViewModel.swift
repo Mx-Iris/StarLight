@@ -7,7 +7,7 @@ final class SettingsViewModel: ViewModel<SettingsRoute>, ObservableObject {
         .init {
             self.appServices.repositoriesService.refreshInterval
         } set: {
-            self.appServices.repositoriesService.refreshInterval = $0
+            self.appServices.repositoriesService.setRefreshInterval($0)
         }
     }
 

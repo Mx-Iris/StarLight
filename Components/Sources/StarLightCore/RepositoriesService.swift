@@ -27,12 +27,16 @@ public actor RepositoriesService {
 
     public var completion: (([Repository]) -> Void)?
 
-    public var refreshInterval: TimeInterval = 15 {
+    public private(set) var refreshInterval: TimeInterval = 15 {
         didSet {
             reloadRefreshTimer()
         }
     }
 
+    public func setRefreshInterval(_ interval: TimeInterval) {
+        refreshInterval = interval
+    }
+    
     private var refreshTimer: Timer?
 
     public enum State {

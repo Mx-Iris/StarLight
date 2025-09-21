@@ -20,7 +20,7 @@ final class MainActionBarController: NSObject {
         self.appServices = appServices
         super.init()
         actionBar.contentSource = self
-        actionBar.rowHeight = 48
+        actionBar.rowHeight = 60
     }
 
     func present() {

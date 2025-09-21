@@ -1,6 +1,5 @@
 import AppKit
 import SwiftUI
-import Luminare
 import StarLightUI
 
 final class LoginViewController: XiblessHostingController<LoginView> {
@@ -26,7 +25,6 @@ struct LoginView: View {
             } label: {
                 Text("Login")
             }
-            .buttonStyle(LuminareCompactButtonStyle())
         }
         .frame(width: 550, height: 300)
     }

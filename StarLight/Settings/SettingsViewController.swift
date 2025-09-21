@@ -1,9 +1,8 @@
 import Foundation
-import KeyboardShortcuts
-import LaunchAtLogin
-import Luminare
 import SwiftUI
 import Defaults
+import LaunchAtLogin
+import KeyboardShortcuts
 
 final class SettingsViewController: XiblessHostingController<SettingsView> {
     let viewModel: SettingsViewModel
@@ -56,7 +55,9 @@ struct SettingsView: View {
                         Text("Repositories Refresh Interval (minutes)")
                     }
                     .onChange(of: repositoriesRefreshInterval) { newValue in
-                        viewModel.appServices.repositoriesService.refreshInterval = newValue
+                        Task {
+                            await viewModel.appServices.repositoriesService.setRefreshInterval(newValue)
+                        }
                     }
 
                     HStack {
@@ -84,8 +85,6 @@ struct SettingsView: View {
                             } label: {
                                 Text("Logout")
                             }
-                            .buttonStyle(LuminareCompactButtonStyle())
-//                            .environment(\.luminareHorizontalPadding, 100)
                             Spacer()
                         }
                     }

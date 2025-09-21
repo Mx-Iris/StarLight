@@ -59,10 +59,6 @@ let package = Package(
             from: "0.2.0"
         ),
         .package(
-            url: "https://github.com/MrKai77/Luminare",
-            from: "0.1.0"
-        ),
-        .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
             from: "0.3.0"
         ),
@@ -107,7 +103,6 @@ let package = Package(
             name: "StarLightUI",
             dependencies: [
                 .product(name: "DSFQuickActionBar", package: "DSFQuickActionBar"),
-                .product(name: "Luminare", package: "Luminare"),
                 .product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI"),
                 .product(name: "StatusItemController", package: "StatusItemController"),
                 .product(name: "MenuBuilder", package: "MenuBuilder"),

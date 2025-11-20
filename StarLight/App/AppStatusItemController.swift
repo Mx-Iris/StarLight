@@ -7,7 +7,7 @@
 
 import AppKit
 import Combine
-import SFSymbol
+import SFSymbols
 import MenuBuilder
 import StatusItemController
 import CocoaCoordinator

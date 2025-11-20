@@ -56,11 +56,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Mx-Iris/UIFoundation",
-            from: "0.2.0"
+            branch: "main",
         ),
         .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
-            from: "0.3.0"
+            branch: "main",
         ),
         .package(
             url: "https://github.com/sindresorhus/KeyboardShortcuts",
@@ -79,8 +79,8 @@ let package = Package(
             from: "3.0.0"
         ),
         .package(
-            url: "https://github.com/Mx-Iris/SFSymbol",
-            from: "0.1.0"
+            url: "https://github.com/Mx-Iris/SFSymbols",
+            branch: "main",
         ),
         .package(
             url: "https://github.com/sindresorhus/LaunchAtLogin-Modern",
@@ -106,7 +106,7 @@ let package = Package(
                 .product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI"),
                 .product(name: "StatusItemController", package: "StatusItemController"),
                 .product(name: "MenuBuilder", package: "MenuBuilder"),
-                .product(name: "SFSymbol", package: "SFSymbol"),
+                .product(name: "SFSymbols", package: "SFSymbols"),
             ]
         ),
 

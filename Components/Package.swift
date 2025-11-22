@@ -5,8 +5,8 @@ import Foundation
 import PackageDescription
 
 extension Package.Dependency {
-    static func package(localPath: String, remotePath: String, branch: String) -> Package.Dependency {
-        if FileManager.default.fileExists(atPath: localPath) {
+    static func package(localPath: String, remotePath: String, branch: String, usingLocal: Bool = true) -> Package.Dependency {
+        if FileManager.default.fileExists(atPath: localPath), usingLocal {
             return .package(path: localPath)
         } else {
             return .package(url: remotePath, branch: branch)
@@ -40,12 +40,19 @@ let package = Package(
         .package(
             localPath: "/Volumes/Repositories/Private/Personal/Library/Multi/GitHubServices",
             remotePath: "https://github.com/Mx-Iris/GitHubServices",
-            branch: "main"
+            branch: "main",
+            usingLocal: false,
         ),
         .package(
-            url: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
-            branch: "main"
+            localPath: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar",
+            remotePath: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
+            branch: "main",
+            usingLocal: true,
         ),
+//        .package(
+//            url: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
+//            branch: "main"
+//        ),
         .package(
             url: "https://github.com/sindresorhus/Defaults",
             from: "8.2.0"
@@ -86,6 +93,10 @@ let package = Package(
             url: "https://github.com/sindresorhus/LaunchAtLogin-Modern",
             from: "1.0.0"
         ),
+        .package(
+            url: "https://github.com/exyte/ProgressIndicatorView",
+            from: "1.1.0"
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -107,6 +118,7 @@ let package = Package(
                 .product(name: "StatusItemController", package: "StatusItemController"),
                 .product(name: "MenuBuilder", package: "MenuBuilder"),
                 .product(name: "SFSymbols", package: "SFSymbols"),
+                .product(name: "ProgressIndicatorView", package: "ProgressIndicatorView"),
             ]
         ),
 

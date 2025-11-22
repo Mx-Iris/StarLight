@@ -18,22 +18,22 @@ struct SettingsView: View {
     var viewModel: SettingsViewModel
 
     @Default(.mainAction)
-    var mainAction
+    private var mainAction
 
     @Default(.windowWidth)
-    var windowWidth
+    private var windowWidth
 
     @Default(.windowHeight)
-    var windowHeight
+    private var windowHeight
 
     @Default(.showSettingsOnLaunch)
-    var showSettingsOnLaunch
+    private var showSettingsOnLaunch
 
     @Default(.showRepositoryDescription)
-    var showRepositoryDescription
+    private var showRepositoryDescription
 
     @Default(.repositoriesRefreshInterval)
-    var repositoriesRefreshInterval
+    private var repositoriesRefreshInterval
 
     var body: some View {
         VStack {

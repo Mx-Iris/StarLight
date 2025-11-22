@@ -41,10 +41,10 @@ public struct Keychain<T: Codable> {
 
     private let key: String
 
-    public init(key: String, service: String, defaultValue: T) {
+    public init(wrappedValue: T, key: String, service: String) {
         self.keychain = .init(service: service).synchronizable(true)
         self.key = key
-        self.defaultValue = defaultValue
+        self.defaultValue = wrappedValue
     }
 
     public var projectedValue: some Publisher<T, Never> {

@@ -14,6 +14,9 @@ import Defaults
 struct MainActionBarCellView: View {
     var repository: Repository
 
+    @Default(.showRepositoryDescription)
+    var showRepositoryDescription
+    
     var body: some View {
         HStack(spacing: 10) {
             WebImage(
@@ -26,6 +29,7 @@ struct MainActionBarCellView: View {
                 },
                 placeholder: {
                     ProgressView()
+                        .controlSize(.regular)
                 }
             )
             .frame(maxWidth: 30, maxHeight: 30)
@@ -36,7 +40,7 @@ struct MainActionBarCellView: View {
                         .multilineTextAlignment(.leading)
                     Spacer()
                 }
-                if Defaults[.showRepositoryDescription] {
+                if showRepositoryDescription {
                     HStack {
                         Text(repository.description ?? "No description")
                             .multilineTextAlignment(.leading)

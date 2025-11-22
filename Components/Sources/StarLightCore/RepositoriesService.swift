@@ -25,18 +25,16 @@ public actor RepositoriesService {
     @Published
     public private(set) var state: State = .idle
 
-    public var completion: (([Repository]) -> Void)?
-
     public private(set) var refreshInterval: TimeInterval = 15 {
         didSet {
-            reloadRefreshTimer()
+            setupAutoRefresh()
         }
     }
 
     public func setRefreshInterval(_ interval: TimeInterval) {
         refreshInterval = interval
     }
-    
+
     private var refreshTimer: Timer?
 
     public enum State {
@@ -49,15 +47,14 @@ public actor RepositoriesService {
         self.client = .init(token: KeychainStorage.token)
         Task {
             await observeTokenChanges()
-            await reloadRefreshTimer()
+            await setupAutoRefresh()
+            await loadRepositories()
         }
-        Task.detached { [self] in
-            do {
-                try await loadRepositories()
-            } catch {
-                print(error)
-            }
-        }
+    }
+
+    deinit {
+        refreshLoopTask?.cancel()
+        tokenCancellable?.cancel()
     }
 
     private func observeTokenChanges() {
@@ -68,24 +65,32 @@ public actor RepositoriesService {
             }
         }
     }
-    
+
     private func updateClient(for token: Token?) {
-        self.client = .init(token: token)
+        client = .init(token: token)
         if token != nil {
-            self.runFetchRepositoriesTask()
+            runFetchRepositoriesTask()
         }
     }
-    
+
     public func refresh() {
         runFetchRepositoriesTask()
     }
 
-    private func reloadRefreshTimer() {
-        refreshTimer?.invalidate()
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshInterval * 60, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            Task {
-                await self.runFetchRepositoriesTask()
+    private var refreshLoopTask: Task<Void, Never>?
+
+    private func setupAutoRefresh() {
+        refreshLoopTask?.cancel()
+
+        let intervalNano = UInt64(refreshInterval * 60 * 1_000_000_000)
+
+        refreshLoopTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: intervalNano)
+                guard let self else { return }
+                if Task.isCancelled { return }
+
+                await runFetchRepositoriesTask()
             }
         }
     }
@@ -118,18 +123,40 @@ public actor RepositoriesService {
         let user = try await client.authenticatedUser()
         let repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
         _repositories = repositories
-        try await saveRepositories()
+        await saveRepositories()
         return repositories
     }
 
-    private func loadRepositories() async throws {
-        state = .loading
-        defer { state = .idle }
-        _repositories = try JSONDecoder().decode([Repository].self, from: Data(contentsOf: storageURL))
+    @concurrent
+    private func loadRepositories() async {
+        await setState(.loading)
+        defer {
+            Task {
+                await setState(.idle)
+            }
+        }
+        do {
+            try await setRepositories(await JSONDecoder().decode([Repository].self, from: Data(contentsOf: storageURL)))
+        } catch {
+            print(error)
+        }
     }
 
-    private func saveRepositories() async throws {
-        try JSONEncoder().encode(_repositories).write(to: storageURL)
+    @concurrent
+    private func saveRepositories() async {
+        do {
+            try await JSONEncoder().encode(_repositories).write(to: storageURL)
+        } catch {
+            print(error)
+        }
+    }
+
+    private func setState(_ state: State) async {
+        self.state = state
+    }
+
+    private func setRepositories(_ repositories: [Repository]) async {
+        _repositories = repositories
     }
 
     private var storageURL: URL {

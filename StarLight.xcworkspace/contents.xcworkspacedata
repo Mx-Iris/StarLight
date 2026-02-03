@@ -4,4 +4,7 @@
    <FileRef
       location = "container:StarLight.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:swift-syntax">
+   </FileRef>
 </Workspace>

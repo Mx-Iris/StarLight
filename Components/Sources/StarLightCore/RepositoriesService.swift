@@ -16,6 +16,10 @@ public actor RepositoriesService {
         }
     }
 
+    public var cachedRepositories: [Repository] {
+        _repositories
+    }
+
     private var _repositories: [Repository] = []
 
     private var client: GitHubClient

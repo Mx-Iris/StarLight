@@ -7,6 +7,7 @@
 
 import AppKit
 import SwiftUI
+import Combine
 import GitHubModels
 import DSFQuickActionBar
 import Defaults
@@ -16,20 +17,49 @@ final class MainActionBarController: NSObject {
 
     let appServices: AppServices
 
+    private var stateSubscription: AnyCancellable?
+
     init(appServices: AppServices) {
         self.appServices = appServices
         super.init()
         actionBar.contentSource = self
         actionBar.rowHeight = 60
+        observeRepositoriesState()
     }
 
     func present() {
         actionBar.cancel()
-        actionBar.present(placeholderText: "Search Starred Repositories", width: Defaults[.windowWidth], height: Defaults[.windowHeight])
+        Task {
+            let hasCache = await !appServices.repositoriesService.cachedRepositories.isEmpty
+            let placeholder = hasCache ? "Search Starred Repositories" : "Loading repositories..."
+            await MainActor.run {
+                actionBar.present(placeholderText: placeholder, width: Defaults[.windowWidth], height: Defaults[.windowHeight])
+            }
+        }
     }
 
     func cancel() {
         actionBar.cancel()
+    }
+
+    private func observeRepositoriesState() {
+        Task {
+            stateSubscription = await appServices.repositoriesService.$state
+                .receive(on: RunLoop.main)
+                .sink { [weak self] state in
+                    guard let self, state == .idle, actionBar.isPresenting else { return }
+                    Task {
+                        let repos = await self.appServices.repositoriesService.cachedRepositories
+                        let searchTerm = await MainActor.run { self.actionBar.currentSearchText ?? "" }
+                        let filtered = repos.filter {
+                            searchTerm.isEmpty || $0.name.localizedCaseInsensitiveContains(searchTerm)
+                        }
+                        await MainActor.run {
+                            self.actionBar.provideResultIdentifiers(filtered)
+                        }
+                    }
+                }
+        }
     }
 }
 
@@ -40,14 +70,13 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
     }
 
     func quickActionBar(_ quickActionBar: DSFQuickActionBar, itemsForSearchTermTask task: DSFQuickActionBar.SearchTask) {
-        Task.detached { [self] in
-            do {
-                let repositories = try await appServices.repositoriesService.repositories
-                await MainActor.run {
-                    task.complete(with: repositories.filter { $0.name.localizedCaseInsensitiveContains(task.searchTerm) })
-                }
-            } catch {
-                print(error)
+        Task {
+            let repositories = await appServices.repositoriesService.cachedRepositories
+            let filtered = repositories.filter {
+                task.searchTerm.isEmpty || $0.name.localizedCaseInsensitiveContains(task.searchTerm)
+            }
+            await MainActor.run {
+                task.complete(with: filtered)
             }
         }
     }

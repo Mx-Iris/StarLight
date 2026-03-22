@@ -49,10 +49,11 @@ final class MainActionBarController: NSObject {
                 .sink { [weak self] state in
                     guard let self, state == .idle, actionBar.isPresenting else { return }
                     Task {
-                        let repos = await self.appServices.repositoriesService.cachedRepositories
                         let searchTerm = await MainActor.run { self.actionBar.currentSearchText ?? "" }
+                        guard !searchTerm.isEmpty else { return }
+                        let repos = await self.appServices.repositoriesService.cachedRepositories
                         let filtered = repos.filter {
-                            searchTerm.isEmpty || $0.name.localizedCaseInsensitiveContains(searchTerm)
+                            $0.name.localizedCaseInsensitiveContains(searchTerm)
                         }
                         await MainActor.run {
                             self.actionBar.provideResultIdentifiers(filtered)
@@ -70,10 +71,14 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
     }
 
     func quickActionBar(_ quickActionBar: DSFQuickActionBar, itemsForSearchTermTask task: DSFQuickActionBar.SearchTask) {
+        guard !task.searchTerm.isEmpty else {
+            task.complete(with: [])
+            return
+        }
         Task {
             let repositories = await appServices.repositoriesService.cachedRepositories
             let filtered = repositories.filter {
-                task.searchTerm.isEmpty || $0.name.localizedCaseInsensitiveContains(task.searchTerm)
+                $0.name.localizedCaseInsensitiveContains(task.searchTerm)
             }
             await MainActor.run {
                 task.complete(with: filtered)

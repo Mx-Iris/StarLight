@@ -18,7 +18,6 @@ let package = Package(
     name: "Components",
     platforms: [.macOS(.v13)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "StarLightCore",
             targets: ["StarLightCore"]
@@ -49,10 +48,6 @@ let package = Package(
             branch: "main",
             usingLocal: true,
         ),
-//        .package(
-//            url: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
-//            branch: "main"
-//        ),
         .package(
             url: "https://github.com/sindresorhus/Defaults",
             from: "8.2.0"
@@ -99,8 +94,6 @@ let package = Package(
         ),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "StarLightCore",
             dependencies: [

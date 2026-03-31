@@ -39,6 +39,37 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
         super.init(initialRoute: initialRoute)
 
         addChild(mainCoordinator)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAuthenticationFailed),
+            name: .repositoriesServiceAuthenticationFailed,
+            object: nil
+        )
+    }
+
+    @objc private func handleAuthenticationFailed() {
+        // Skip if already presenting the login screen
+        guard !children.contains(where: { $0 is LoginCoordinator }) else { return }
+
+        // Close settings window if open, bypass delegate to avoid double-triggering login
+        if let settingsCoordinator = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
+            settingsCoordinator.delegate = nil
+            settingsCoordinator.windowController.close()
+            removeChild(settingsCoordinator)
+        }
+
+        // Cancel quick action bar if open
+        mainCoordinator.quickActionBarController.cancel()
+
+        let alert = NSAlert()
+        alert.messageText = "Authentication Expired"
+        alert.informativeText = "Your GitHub token is no longer valid. Please log in again."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Log In")
+        alert.runModal()
+
+        trigger(.login)
     }
 
     override func prepareTransition(for route: AppRoute) -> AppTransition {

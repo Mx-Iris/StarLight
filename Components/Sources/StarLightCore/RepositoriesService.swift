@@ -3,6 +3,10 @@ import Combine
 import GitHubModels
 import GitHubNetworking
 
+extension Foundation.Notification.Name {
+    public static let repositoriesServiceAuthenticationFailed = Foundation.Notification.Name("repositoriesServiceAuthenticationFailed")
+}
+
 public actor RepositoriesService {
     public var repositories: [Repository] {
         get async throws {
@@ -124,11 +128,32 @@ public actor RepositoriesService {
             state = .idle
             fetchRepositoriesTask = nil
         }
-        let user = try await client.authenticatedUser()
-        let repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
-        _repositories = repositories
-        await saveRepositories()
-        return repositories
+        do {
+            let user = try await client.authenticatedUser()
+            let repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
+            _repositories = repositories
+            await saveRepositories()
+            return repositories
+        } catch let error as APIError {
+            if case .serverError(let response) = error, Self.isAuthenticationFailure(message: response.message) {
+                KeychainStorage.token = nil
+                await MainActor.run {
+                    NotificationCenter.default.post(name: .repositoriesServiceAuthenticationFailed, object: nil)
+                }
+            }
+            throw error
+        }
+    }
+
+    private static let authenticationFailureMessages = [
+        "Bad credentials",
+        "Requires authentication",
+        "Resource not accessible by personal access token",
+    ]
+
+    private static func isAuthenticationFailure(message: String?) -> Bool {
+        guard let message else { return false }
+        return authenticationFailureMessages.contains(where: { message.localizedCaseInsensitiveContains($0) })
     }
 
     @concurrent

@@ -27,6 +27,21 @@ final class MainActionBarController: NSObject {
         observeRepositoriesState()
     }
 
+    /// Matches a repository against a search term by checking multiple fields:
+    /// name, fullname (owner/repo), description, topics, and language.
+    /// Supports multi-word queries where each word must match at least one field.
+    private func repositoryMatchesSearchTerm(_ repository: Repository, searchTerm: String) -> Bool {
+        let words = searchTerm.split(separator: " ").map(String.init)
+        guard !words.isEmpty else { return false }
+        return words.allSatisfy { word in
+            repository.name.localizedCaseInsensitiveContains(word)
+                || repository.fullname.localizedCaseInsensitiveContains(word)
+                || (repository.description?.localizedCaseInsensitiveContains(word) ?? false)
+                || (repository.language?.localizedCaseInsensitiveContains(word) ?? false)
+                || repository.topics.contains(where: { $0.localizedCaseInsensitiveContains(word) })
+        }
+    }
+
     func present() {
         actionBar.cancel()
         Task {
@@ -53,7 +68,7 @@ final class MainActionBarController: NSObject {
                         guard !searchTerm.isEmpty else { return }
                         let repos = await self.appServices.repositoriesService.cachedRepositories
                         let filtered = repos.filter {
-                            $0.name.localizedCaseInsensitiveContains(searchTerm)
+                            self.repositoryMatchesSearchTerm($0, searchTerm: searchTerm)
                         }
                         await MainActor.run {
                             self.actionBar.provideResultIdentifiers(filtered)
@@ -78,7 +93,7 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
         Task {
             let repositories = await appServices.repositoriesService.cachedRepositories
             let filtered = repositories.filter {
-                $0.name.localizedCaseInsensitiveContains(task.searchTerm)
+                self.repositoryMatchesSearchTerm($0, searchTerm: task.searchTerm)
             }
             await MainActor.run {
                 task.complete(with: filtered)

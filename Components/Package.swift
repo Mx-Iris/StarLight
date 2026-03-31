@@ -1,16 +1,39 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import Foundation
 import PackageDescription
 
 extension Package.Dependency {
-    static func package(localPath: String, remotePath: String, branch: String, usingLocal: Bool = true) -> Package.Dependency {
-        if FileManager.default.fileExists(atPath: localPath), usingLocal {
-            return .package(path: localPath)
-        } else {
-            return .package(url: remotePath, branch: branch)
+    enum LocalSearchPath {
+        case package(path: String, isRelative: Bool, isEnabled: Bool, traits: Set<PackageDescription.Package.Dependency.Trait> = [.defaults])
+    }
+
+    static func package(local localSearchPaths: LocalSearchPath..., remote: Package.Dependency) -> Package.Dependency {
+        let currentFilePath = #filePath
+        let isClonedDependency = currentFilePath.contains("/checkouts/") ||
+            currentFilePath.contains("/SourcePackages/") ||
+            currentFilePath.contains("/.build/")
+
+        if isClonedDependency {
+            return remote
         }
+        for local in localSearchPaths {
+            switch local {
+            case .package(let path, let isRelative, let isEnabled, let traits):
+                guard isEnabled else { continue }
+                let url = if isRelative {
+                    URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: #filePath))
+                } else {
+                    URL(fileURLWithPath: path)
+                }
+
+                if FileManager.default.fileExists(atPath: url.path) {
+                    return .package(path: url.path, traits: traits)
+                }
+            }
+        }
+        return remote
     }
 }
 
@@ -37,16 +60,36 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            localPath: "/Volumes/Repositories/Private/Personal/Library/Multi/GitHubServices",
-            remotePath: "https://github.com/Mx-Iris/GitHubServices",
-            branch: "main",
-            usingLocal: false,
+            local: .package(
+                path: "/Volumes/Repositories/Private/Personal/Library/Multi/GitHubServices",
+                isRelative: false,
+                isEnabled: true
+            ),
+            .package(
+                path: "../GitHubServices",
+                isRelative: true,
+                isEnabled: false
+            ),
+            remote: .package(
+                url: "https://github.com/Mx-Iris/GitHubServices",
+                branch: "main"
+            )
         ),
         .package(
-            localPath: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar",
-            remotePath: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
-            branch: "main",
-            usingLocal: true,
+            local: .package(
+                path: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar",
+                isRelative: false,
+                isEnabled: true
+            ),
+            .package(
+                path: "/Volumes/Code/Personal/DSFQuickActionBar",
+                isRelative: true,
+                isEnabled: true
+            ),
+            remote: .package(
+                url: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
+                branch: "main"
+            )
         ),
         .package(
             url: "https://github.com/sindresorhus/Defaults",
@@ -58,11 +101,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Mx-Iris/UIFoundation",
-            branch: "main",
+            from: "0.4.0"
         ),
         .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
-            branch: "main",
+            from: "0.4.1"
         ),
         .package(
             url: "https://github.com/sindresorhus/KeyboardShortcuts",
@@ -82,7 +125,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Mx-Iris/SFSymbols",
-            branch: "main",
+            from: "0.2.0"
         ),
         .package(
             url: "https://github.com/sindresorhus/LaunchAtLogin-Modern",
@@ -132,5 +175,6 @@ let package = Package(
                 .process("Resources"),
             ]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v5],
 )

@@ -9,11 +9,11 @@ import AppKit
 import SwiftUI
 import Combine
 import GitHubModels
-import DSFQuickActionBar
+import UIFoundation
 import Defaults
 
 final class MainActionBarController: NSObject {
-    let actionBar = DSFQuickActionBar()
+    let actionBar = QuickActionBar()
 
     let appServices: AppServices
 
@@ -79,13 +79,13 @@ final class MainActionBarController: NSObject {
     }
 }
 
-extension MainActionBarController: DSFQuickActionBarContentSource {
-    func quickActionBar(_ quickActionBar: DSFQuickActionBar, viewForItem item: AnyHashable, searchTerm: String) -> NSView? {
+extension MainActionBarController: QuickActionBarContentSource {
+    func quickActionBar(_ quickActionBar: QuickActionBar, viewForItem item: AnyHashable, searchTerm: String) -> NSView? {
         guard let repository = item as? Repository else { return nil }
         return NSHostingView(rootView: MainActionBarCellView(repository: repository))
     }
 
-    func quickActionBar(_ quickActionBar: DSFQuickActionBar, itemsForSearchTermTask task: DSFQuickActionBar.SearchTask) {
+    func quickActionBar(_ quickActionBar: QuickActionBar, itemsForSearchTermTask task: QuickActionBar.SearchTask) {
         guard !task.searchTerm.isEmpty else {
             task.complete(with: [])
             return
@@ -101,7 +101,7 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
         }
     }
 
-    func quickActionBar(_ quickActionBar: DSFQuickActionBar, didActivateItem item: AnyHashable) {
+    func quickActionBar(_ quickActionBar: QuickActionBar, didActivateItem item: AnyHashable) {
         guard let repository = item as? Repository else { return }
         switch Defaults[.mainAction] {
         case .openURL:
@@ -123,7 +123,7 @@ extension MainActionBarController: DSFQuickActionBarContentSource {
         NSWorkspace.shared.open(repository.htmlURL)
     }
 
-    func quickActionBar(_ quickActionBar: DSFQuickActionBar, canSelectItem item: AnyHashable) -> Bool {
+    func quickActionBar(_ quickActionBar: QuickActionBar, canSelectItem item: AnyHashable) -> Bool {
         true
     }
 }

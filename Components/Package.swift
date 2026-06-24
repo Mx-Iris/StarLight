@@ -76,22 +76,6 @@ let package = Package(
             )
         ),
         .package(
-            local: .package(
-                path: "/Volumes/Repositories/Private/Fork/Library/DSFQuickActionBar",
-                isRelative: false,
-                isEnabled: true
-            ),
-            .package(
-                path: "/Volumes/Code/Personal/DSFQuickActionBar",
-                isRelative: true,
-                isEnabled: true
-            ),
-            remote: .package(
-                url: "https://github.com/MxIris-macOS-Library-Forks/DSFQuickActionBar",
-                branch: "main"
-            )
-        ),
-        .package(
             url: "https://github.com/sindresorhus/Defaults",
             from: "8.2.0"
         ),
@@ -101,7 +85,8 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Mx-Iris/UIFoundation",
-            from: "0.4.0"
+            from: "0.11.0",
+            traits: ["QuickActionBar"]
         ),
         .package(
             url: "https://github.com/Mx-Iris/CocoaCoordinator",
@@ -135,6 +120,10 @@ let package = Package(
             url: "https://github.com/exyte/ProgressIndicatorView",
             from: "1.1.0"
         ),
+        .package(
+            url: "https://github.com/Mx-Iris/FrameworkToolbox",
+            from: "0.7.1"
+        ),
     ],
     targets: [
         .target(
@@ -149,12 +138,13 @@ let package = Package(
         .target(
             name: "StarLightUI",
             dependencies: [
-                .product(name: "DSFQuickActionBar", package: "DSFQuickActionBar"),
                 .product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI"),
                 .product(name: "StatusItemController", package: "StatusItemController"),
                 .product(name: "MenuBuilder", package: "MenuBuilder"),
                 .product(name: "SFSymbols", package: "SFSymbols"),
                 .product(name: "ProgressIndicatorView", package: "ProgressIndicatorView"),
+                .product(name: "UIFoundation", package: "UIFoundation"),
+                .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
             ]
         ),
 
@@ -163,10 +153,9 @@ let package = Package(
             dependencies: [
                 .product(name: "Defaults", package: "Defaults"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
-                .product(name: "UIFoundation", package: "UIFoundation"),
-                .product(name: "CocoaCoordinator", package: "CocoaCoordinator"),
                 .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
                 .product(name: "LaunchAtLogin", package: "LaunchAtLogin-Modern"),
+                .product(name: "FoundationToolbox", package: "FrameworkToolbox"),
             ]
         ),
         .target(

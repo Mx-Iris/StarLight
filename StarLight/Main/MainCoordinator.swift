@@ -11,7 +11,6 @@ import GitHubModels
 import StarLightCore
 import StarLightResources
 import CocoaCoordinator
-import DSFQuickActionBar
 import KeyboardShortcuts
 import SDWebImageSwiftUI
 import Defaults

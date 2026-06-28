@@ -1,10 +1,13 @@
 import Foundation
 import GitHubModels
-import StarLightUtilities
+import FoundationToolbox
 
-enum KeychainStorage {
-    private static let serviceName = "com.JH.StarLight.KeychainStorage"
+enum Keychains {
+    private static let serviceName = "com.JH.StarLight.Keychains"
 
     @Keychain(key: "token", service: serviceName)
     static var token: Token? = nil
 }
+
+extension Token: @retroactive @unchecked Sendable {}
+extension Token: @retroactive KeychainCodableStorable {}

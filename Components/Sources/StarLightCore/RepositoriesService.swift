@@ -52,7 +52,7 @@ public actor RepositoriesService {
     }
 
     public init() {
-        self.client = .init(token: KeychainStorage.token)
+        self.client = .init(token: Keychains.token)
         Task {
             await observeTokenChanges()
             await setupAutoRefresh()
@@ -66,7 +66,7 @@ public actor RepositoriesService {
     }
 
     private func observeTokenChanges() {
-        tokenCancellable = KeychainStorage.$token.sink { [weak self] token in
+        tokenCancellable = Keychains.$token.sink { [weak self] token in
             guard let self else { return }
             Task {
                 await self.updateClient(for: token)
@@ -136,7 +136,7 @@ public actor RepositoriesService {
             return repositories
         } catch let error as APIError {
             if case .serverError(let response) = error, Self.isAuthenticationFailure(message: response.message) {
-                KeychainStorage.token = nil
+                Keychains.token = nil
                 await MainActor.run {
                     NotificationCenter.default.post(name: .repositoriesServiceAuthenticationFailed, object: nil)
                 }

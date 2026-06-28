@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-StarLight is a macOS menu bar app that lets you search GitHub starred repositories using a Spotlight-like quick action bar (DSFQuickActionBar). It authenticates via GitHub OAuth, fetches starred repos, caches them locally as JSON, and presents a keyboard-shortcut-triggered search panel.
+StarLight is a macOS menu bar app that lets you search GitHub starred repositories using a Spotlight-like quick action bar (DSFQuickActionBar). It authenticates via GitHub OAuth **Device Flow** (no client secret required, multi-device friendly), fetches starred repos, caches them locally as JSON, and presents a keyboard-shortcut-triggered search panel.
 
 - **Platform:** macOS 13.0+ (deployment target), built with AppKit + SwiftUI hybrid
 - **Swift tools version:** 5.10 (Components SPM package), Swift 5 in Xcode project
@@ -46,7 +46,7 @@ Each coordinator defines a `Route` enum and a `prepareTransition(for:)` method. 
 
 ### Components Package Targets
 
-- **StarLightCore** — business logic: `LoginService` (GitHub OAuth), `RepositoriesService` (actor, fetches/caches starred repos), `Configs`, `KeychainStorage`
+- **StarLightCore** — business logic: `LoginService` (GitHub OAuth Device Flow + `LoginServiceDelegate` for surfacing `DeviceCode` to UI), `RepositoriesService` (actor, fetches/caches starred repos), `Configs`, `Keychains`
 - **StarLightUI** — UI components: `AsyncButton`, quick action bar integration, status item helpers
 - **StarLightUtilities** — cross-cutting: `@UserDefault` property wrapper (wraps Defaults), `@Keychain` property wrapper (wraps KeychainAccess)
 - **StarLightResources** — bundled assets

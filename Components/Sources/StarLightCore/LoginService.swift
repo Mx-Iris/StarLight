@@ -1,73 +1,64 @@
 import Foundation
+import GitHubModels
 import GitHubNetworking
-@preconcurrency import AuthenticationServices
+
+@MainActor
+public protocol LoginServiceDelegate: AnyObject {
+    func loginService(_ service: LoginService, didReceiveDeviceCode deviceCode: DeviceCode)
+}
 
 public actor LoginService {
     public init() {}
 
     @MainActor
-    private var authSession: ASWebAuthenticationSession?
-
-    @MainActor
-    private let presentationContextProvider = WebAuthenticationPresentationContextProvidingCoordinator()
+    public weak var delegate: LoginServiceDelegate?
 
     public nonisolated var hasLogin: Bool {
-        KeychainStorage.token != nil
+        Keychains.token != nil
     }
 
+    private var loginTask: Task<Token, Error>?
+
     public func login() async throws {
-        enum UnknownError: Error {
-            case unknownError
-        }
+        loginTask?.cancel()
 
-        KeychainStorage.token = try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.main.async { [self] in
-                let authSession = ASWebAuthenticationSession(url: Configs.App.githubLoginURL, callbackURLScheme: Configs.App.urlScheme, completionHandler: { url, error in
-                    if let code = url?.queryParameters?["code"] {
-                        GitHubClient.accessToken(clientID: Configs.App.githubID, clientSecret: Configs.App.githubSecrets, code: code, redirectURI: nil, state: nil) { result in
-                            switch result {
-                            case .success(let token):
-                                continuation.resume(returning: token)
-                            case .failure(let error):
-                                continuation.resume(throwing: error)
-                            }
-                        }
-                    } else if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(throwing: UnknownError.unknownError)
-                    }
-
-                })
-                authSession.presentationContextProvider = presentationContextProvider
-                authSession.prefersEphemeralWebBrowserSession = true
-                authSession.start()
-                self.authSession = authSession
-            }
+        let service = self
+        let task = Task { () throws -> Token in
+            try await GitHubClient.deviceFlowLogin(
+                clientID: Configs.App.githubID,
+                scopes: Configs.App.githubScopes,
+                onUserCode: { deviceCode in
+                    Task { await service.publishDeviceCode(deviceCode) }
+                }
+            )
         }
+        loginTask = task
+
+        defer { loginTask = nil }
+        let token = try await task.value
+        Keychains.token = token
+    }
+
+    public func cancelLogin() {
+        loginTask?.cancel()
+        loginTask = nil
     }
 
     public nonisolated func logout() {
-        KeychainStorage.token = nil
+        Keychains.token = nil
     }
-}
 
-private final class WebAuthenticationPresentationContextProvidingCoordinator: NSObject, ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return NSApp.keyWindow ?? NSApp.mainWindow ?? NSApp.orderedWindows.first!
+    /// The user-facing URL where users can review or revoke this app's authorization on GitHub.
+    /// Shown from Settings as the "Manage on GitHub" affiliate of `logout()`, since dropping the
+    /// client secret means we no longer call `DELETE /applications/{client_id}/token` ourselves.
+    public nonisolated static var manageAuthorizationURL: URL {
+        URL(string: "https://github.com/settings/connections/applications/\(Configs.App.githubID)")!
     }
-}
 
-extension URL {
-    fileprivate var queryParameters: [String: String]? {
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems else { return nil }
-
-        var items: [String: String] = [:]
-
-        for queryItem in queryItems {
-            items[queryItem.name] = queryItem.value
+    private func publishDeviceCode(_ deviceCode: DeviceCode) async {
+        await MainActor.run { [weak self] in
+            guard let self else { return }
+            self.delegate?.loginService(self, didReceiveDeviceCode: deviceCode)
         }
-
-        return items
     }
 }

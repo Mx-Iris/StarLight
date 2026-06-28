@@ -76,8 +76,17 @@ struct SettingsView: View {
                     }
 
                 } footer: {
-                    VStack {
+                    VStack(spacing: 12) {
                         Spacer(minLength: 20)
+                        HStack {
+                            Spacer()
+                            Button {
+                                viewModel.manageAuthorizationsOnGitHub()
+                            } label: {
+                                Text("Manage Authorizations on GitHub")
+                            }
+                            Spacer()
+                        }
                         HStack {
                             Spacer()
                             Button {

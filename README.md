@@ -13,5 +13,5 @@ StarLight authenticates with GitHub using the OAuth **Device Flow**. When you la
 The Device Flow does not require a client secret to be shipped inside the app, so:
 
 - StarLight can be used on as many devices as you like without each new login knocking the previous device offline.
+- When signed out, protected menu commands and the global keyboard shortcut open the sign-in window instead of presenting authenticated content.
 - To revoke access at any time, open *Settings → Manage Authorizations on GitHub*, or visit [github.com/settings/applications](https://github.com/settings/applications).
-

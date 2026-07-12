@@ -44,6 +44,7 @@ OAuth Device Flow 是 GitHub 为没有 redirect 回调能力的客户端（CLI�
   - 引入 `@MainActor` 的 `LoginServiceDelegate`，在拿到 device code 后通过 `loginService(_:didReceiveDeviceCode:)` 通知 UI。
   - 新增 `cancelLogin()`，对应 UI 上的 Cancel 操作。
   - `logout()` 回归同步 `nonisolated`，仅清本地 Keychain，**不调用远端 revoke**；同时提供 `manageAuthorizationURL` 静态属性指向 `https://github.com/settings/connections/applications/<client_id>`，给 UI 一个"去 GitHub 手动撤销"的入口。
+- `StarLight/App/AppCoordinator.swift` —— 根类使用 `CocoaCoordinator.AppCoordinator`，在根路由统一执行登录门禁。未登录时，主窗口、设置、刷新菜单和全局快捷键都会复用同一个登录窗口；认证失效由 `.authenticationFailed` 组合 transition 依次取消主面板、关闭设置并显示带错误提示的登录页，不再使用阻塞式 `NSAlert.runModal()`。
 - `StarLight/Login/LoginViewModel.swift` —— `@MainActor`，发布 `deviceCode / isAuthorizing / errorMessage`；`startLogin()` 调用 `loginService.login()`，收到 device code 后自动 `NSPasteboard` 复制 user code 并 `NSWorkspace.shared.open(verification_uri)`；`cancelLogin()` 取消轮询。
 - `StarLight/Login/LoginViewController.swift` —— 登录界面三态：未开始（"Sign in with GitHub" 按钮）/ 拿码中（spinner）/ 已拿码（大字号等宽 user code、"Open GitHub again"、"Cancel"、底部"Waiting for you to authorize…" spinner）。
 - `StarLight/Settings/SettingsViewController.swift` & `SettingsViewModel.swift` —— Settings 底部新增 "Manage Authorizations on GitHub" 按钮，点击打开 `manageAuthorizationURL`，代替我们丢掉的远端 revoke 功能。

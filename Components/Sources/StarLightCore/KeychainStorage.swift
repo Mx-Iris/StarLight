@@ -5,7 +5,7 @@ import FoundationToolbox
 enum Keychains {
     private static let serviceName = "com.JH.StarLight.Keychains"
 
-    @Keychain(key: "token", service: serviceName)
+    @Keychain(key: "token", service: serviceName, synchronizable: false)
     static var token: Token? = nil
 }
 

@@ -71,9 +71,7 @@ final class AppStatusItemController: StatusItemController {
             MenuItem("Refresh")
                 .onSelect { [weak self] in
                     guard let self else { return }
-                    Task {
-                        await self.appServices.repositoriesService.refresh()
-                    }
+                    router.trigger(.refresh)
                 }
             SeparatorItem()
             MenuItem("Quit")

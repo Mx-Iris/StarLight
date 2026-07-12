@@ -3,7 +3,7 @@ import GitHubModels
 import CocoaCoordinator
 
 enum LoginRoute: Routable {
-    case login
+    case login(errorMessage: String?)
     case logged
 }
 
@@ -25,8 +25,8 @@ final class LoginCoordinator: SceneCoordinator<LoginRoute, LoginTransition> {
 
     override func prepareTransition(for route: LoginRoute) -> LoginTransition {
         switch route {
-        case .login:
-            let viewModel = LoginViewModel(appServices: appServices, router: self)
+        case .login(let errorMessage):
+            let viewModel = LoginViewModel(appServices: appServices, router: self, initialErrorMessage: errorMessage)
             let viewController = LoginViewController(viewModel: viewModel)
             return .show(viewController)
         case .logged:

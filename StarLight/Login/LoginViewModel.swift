@@ -13,7 +13,8 @@ final class LoginViewModel: ViewModel<LoginRoute>, ObservableObject {
 
     private var loginTask: Task<Void, Never>?
 
-    override init(appServices: AppServices, router: any Router<LoginRoute>) {
+    init(appServices: AppServices, router: any Router<LoginRoute>, initialErrorMessage: String? = nil) {
+        self.errorMessage = initialErrorMessage
         super.init(appServices: appServices, router: router)
         let service = appServices.loginService
         Task { @MainActor in

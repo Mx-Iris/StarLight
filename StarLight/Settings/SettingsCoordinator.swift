@@ -4,6 +4,7 @@ import CocoaCoordinator
 
 enum SettingsRoute: Routable {
     case settings
+    case dismiss
     case logout
 }
 
@@ -29,7 +30,7 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
         case .settings:
             let settingsViewController = SettingsViewController(viewModel: .init(appServices: appServices, router: self))
             return .show(settingsViewController)
-        case .logout:
+        case .dismiss, .logout:
             return .close()
         }
     }
@@ -39,6 +40,8 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
         case .settings:
             NSApp.setActivationPolicy(.regular)
             NSApp.activate(ignoringOtherApps: true)
+        case .dismiss:
+            break
         case .logout:
             delegate?.settingsCoordinatorDidLogout(self)
         }

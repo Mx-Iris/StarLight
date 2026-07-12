@@ -89,8 +89,20 @@ let package = Package(
             traits: ["QuickActionBar"]
         ),
         .package(
-            url: "https://github.com/Mx-Iris/CocoaCoordinator",
-            from: "0.4.1"
+            local: .package(
+                path: "/Volumes/Repositories/Private/Personal/Library/macOS/CocoaCoordinator",
+                isRelative: false,
+                isEnabled: true
+            ),
+            .package(
+                path: "../../../Library/macOS/CocoaCoordinator",
+                isRelative: true,
+                isEnabled: false
+            ),
+            remote: .package(
+                url: "https://github.com/Mx-Iris/CocoaCoordinator",
+                branch: "main"
+            )
         ),
         .package(
             url: "https://github.com/sindresorhus/KeyboardShortcuts",

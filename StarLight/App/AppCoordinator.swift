@@ -10,14 +10,26 @@ import GitHubModels
 import CocoaCoordinator
 import StarLightCore
 import Defaults
+import KeyboardShortcuts
 
 enum AppRoute: Routable {
     case login
+    case authenticationFailed
     case settings
     case main
+    case refresh
+
+    var requiresAuthentication: Bool {
+        switch self {
+        case .login, .authenticationFailed:
+            false
+        case .settings, .main, .refresh:
+            true
+        }
+    }
 }
 
-final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
+final class AppCoordinator: CocoaCoordinator.AppCoordinator<AppRoute> {
     let appServices: AppServices
 
     let mainCoordinator: MainCoordinator
@@ -38,7 +50,7 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
 
         super.init(initialRoute: initialRoute)
 
-        addChild(mainCoordinator)
+        setupKeyboardShortcuts()
 
         NotificationCenter.default.addObserver(
             self,
@@ -48,63 +60,81 @@ final class AppCoordinator: Coordinator<AppRoute, AppTransition> {
         )
     }
 
-    @objc private func handleAuthenticationFailed() {
-        // Skip if already presenting the login screen
-        guard !children.contains(where: { $0 is LoginCoordinator }) else { return }
-
-        // Close settings window if open, bypass delegate to avoid double-triggering login
-        if let settingsCoordinator = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
-            settingsCoordinator.delegate = nil
-            settingsCoordinator.windowController.close()
-            removeChild(settingsCoordinator)
+    private func setupKeyboardShortcuts() {
+        KeyboardShortcuts.onKeyDown(for: .main) { [weak self] in
+            guard let self else { return }
+            trigger(.main)
         }
+    }
 
-        // Cancel quick action bar if open
-        mainCoordinator.quickActionBarController.cancel()
-
-        let alert = NSAlert()
-        alert.messageText = "Authentication Expired"
-        alert.informativeText = "Your GitHub token is no longer valid. Please log in again."
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Log In")
-        alert.runModal()
-
-        trigger(.login)
+    @objc private func handleAuthenticationFailed() {
+        trigger(.authenticationFailed)
     }
 
     override func prepareTransition(for route: AppRoute) -> AppTransition {
-        switch route {
+        var finalRoute = route
+        if route.requiresAuthentication && !appServices.loginService.hasLogin {
+            finalRoute = .login
+        }
+        switch finalRoute {
         case .login:
-            let loginCoordinator = LoginCoordinator(appServices: appServices)
-            loginCoordinator.delegate = self
-            addChild(loginCoordinator)
-            return .route(on: loginCoordinator, to: .login)
+            return loginTransition(errorMessage: nil)
+        case .authenticationFailed:
+            return authenticationFailureTransition()
         case .settings:
-            let settingsCoordinator: SettingsCoordinator
-            if let child = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
-                settingsCoordinator = child
-            } else {
-                settingsCoordinator = SettingsCoordinator(appServices: appServices)
-                addChild(settingsCoordinator)
-            }
-            settingsCoordinator.delegate = self
-            return .route(on: settingsCoordinator, to: .settings)
+            return settingsTransition()
         case .main:
             return .route(on: mainCoordinator, to: .present)
+        case .refresh:
+            Task {
+                await appServices.repositoriesService.refresh()
+            }
+            return .none()
         }
+    }
+
+    private func loginTransition(errorMessage: String?) -> AppTransition {
+        let loginCoordinator: LoginCoordinator
+        if let existingLoginCoordinator = children.first(where: { $0 is LoginCoordinator }) as? LoginCoordinator {
+            loginCoordinator = existingLoginCoordinator
+        } else {
+            loginCoordinator = LoginCoordinator(appServices: appServices)
+        }
+        loginCoordinator.delegate = self
+        return .route(on: loginCoordinator, to: .login(errorMessage: errorMessage))
+    }
+
+    private func settingsTransition() -> AppTransition {
+        let settingsCoordinator: SettingsCoordinator
+        if let existingSettingsCoordinator = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
+            settingsCoordinator = existingSettingsCoordinator
+        } else {
+            settingsCoordinator = SettingsCoordinator(appServices: appServices)
+        }
+        settingsCoordinator.delegate = self
+        return .route(on: settingsCoordinator, to: .settings)
+    }
+
+    private func authenticationFailureTransition() -> AppTransition {
+        var transitions: [AppTransition] = [
+            .route(on: mainCoordinator, to: .cancel),
+        ]
+        if let settingsCoordinator = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
+            transitions.append(.route(on: settingsCoordinator, to: .dismiss))
+        }
+        transitions.append(loginTransition(errorMessage: "Your GitHub token is no longer valid. Please log in again."))
+        return .multiple(transitions)
     }
 }
 
 extension AppCoordinator: LoginCoordinator.Delegate {
     func loginCoordinatorDidLogin(_ coordinator: LoginCoordinator) {
         trigger(.settings)
-        removeChild(coordinator)
     }
 }
 
 extension AppCoordinator: SettingsCoordinator.Delegate {
     func settingsCoordinatorDidLogout(_ coordinator: SettingsCoordinator) {
         trigger(.login)
-        removeChild(coordinator)
     }
 }

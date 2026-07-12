@@ -1,5 +1,5 @@
 {
-  "originHash" : "dd486840212bdb7754d188643cd7b1fc951c0b164475aa992ca5a57ac528f820",
+  "originHash" : "bcb2497f5e216e6d23fb9b9c177d8e937fe6231690c8ab0c9817ae5546b6124b",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -35,15 +35,6 @@
       "state" : {
         "revision" : "f358e1ccf6761b9d1d53136022a65c601cdc4da3",
         "version" : "0.15.0"
-      }
-    },
-    {
-      "identity" : "cocoacoordinator",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Mx-Iris/CocoaCoordinator",
-      "state" : {
-        "revision" : "7bfb995aafa0c802bb8296add707421e6950d1b0",
-        "version" : "0.5.0"
       }
     },
     {
@@ -268,7 +259,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "07ebc9c071b22a5d021031b798c3a84b76281213"
+        "revision" : "27b7fc1a19068bcea3d2072db0ce86360d1400ed"
       }
     },
     {

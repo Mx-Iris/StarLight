@@ -11,7 +11,6 @@ import GitHubModels
 import StarLightCore
 import StarLightResources
 import CocoaCoordinator
-import KeyboardShortcuts
 import SDWebImageSwiftUI
 import Defaults
 
@@ -29,13 +28,12 @@ enum MainRoute: Routable {
 final class MainCoordinator: Coordinator<MainRoute, AppTransition> {
     let appServices: AppServices
 
-    let quickActionBarController: MainActionBarController
+    private let quickActionBarController: MainActionBarController
 
     init(appServices: AppServices) {
         self.appServices = appServices
         self.quickActionBarController = .init(appServices: appServices)
         super.init(initialRoute: nil)
-        setupKeyboardShortcuts()
     }
 
     override func prepareTransition(for route: MainRoute) -> AppTransition {
@@ -49,10 +47,4 @@ final class MainCoordinator: Coordinator<MainRoute, AppTransition> {
         }
     }
 
-    func setupKeyboardShortcuts() {
-        KeyboardShortcuts.onKeyDown(for: .main) { [weak self] in
-            guard let self, appServices.loginService.hasLogin else { return }
-            trigger(.present)
-        }
-    }
 }

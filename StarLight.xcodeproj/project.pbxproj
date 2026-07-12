@@ -7,62 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E913AE792D25993C0027ACA1 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */; };
-		E91AE1E32D218FAF0076BD59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */; };
-		E91AE1E42D218FAF0076BD59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */; };
-		E91AE1E52D218FAF0076BD59 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E91AE1E02D218FAF0076BD59 /* MainMenu.xib */; };
-		E929DE732D414389009F4020 /* MainActionBarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E929DE722D414389009F4020 /* MainActionBarCellView.swift */; };
-		E929DE752D4143B1009F4020 /* MainActionBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E929DE742D4143B1009F4020 /* MainActionBarController.swift */; };
-		E9339F692D2811BD005AEA76 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F682D2811BD005AEA76 /* MainCoordinator.swift */; };
-		E9339F952D282B09005AEA76 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */; };
-		E9339F972D282B39005AEA76 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F962D282B39005AEA76 /* SettingsViewController.swift */; };
-		E9339F992D282BE2005AEA76 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */; };
-		E9339F9B2D282C12005AEA76 /* XiblessHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */; };
-		E975C5C62D392E8B0059BE92 /* TestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C5C52D392E8B0059BE92 /* TestCoordinator.swift */; };
-		E975C5CF2D3937280059BE92 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */; };
 		E9794A652D22E54000AAA0C7 /* StarLightUI in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A642D22E54000AAA0C7 /* StarLightUI */; };
 		E9794A672D22E6E900AAA0C7 /* StarLightCore in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A662D22E6E900AAA0C7 /* StarLightCore */; };
 		E9794A692D22E70A00AAA0C7 /* StarLightUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = E9794A682D22E70A00AAA0C7 /* StarLightUtilities */; };
-		E9E06A082D23E897008055CE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A052D23E897008055CE /* LoginViewController.swift */; };
-		E9E06A092D23E897008055CE /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A062D23E897008055CE /* LoginViewModel.swift */; };
-		E9E06A0A2D23E897008055CE /* LoginWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A072D23E897008055CE /* LoginWindowController.swift */; };
-		E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A042D23E897008055CE /* LoginCoordinator.swift */; };
-		E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A0C2D23E913008055CE /* ViewModel.swift */; };
-		E9E06A0F2D23E937008055CE /* AppServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A0E2D23E937008055CE /* AppServices.swift */; };
-		E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E06A102D23E95E008055CE /* AppCoordinator.swift */; };
-		E9E90AEE2D2A5A03001607C9 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E90AED2D2A5A03001607C9 /* Settings.swift */; };
-		E9E90AF02D2A5AF4001607C9 /* AppStatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E90AEF2D2A5AF4001607C9 /* AppStatusItemController.swift */; };
 		E9FA27682D295FFA008D9221 /* StarLightResources in Frameworks */ = {isa = PBXBuildFile; productRef = E9FA27672D295FFA008D9221 /* StarLightResources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		E91AE1CD2D218FAA0076BD59 /* StarLight-Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "StarLight-Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E91AE1DF2D218FAF0076BD59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StarLight.entitlements; sourceTree = "<group>"; };
-		E929DE722D414389009F4020 /* MainActionBarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionBarCellView.swift; sourceTree = "<group>"; };
-		E929DE742D4143B1009F4020 /* MainActionBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionBarController.swift; sourceTree = "<group>"; };
 		E932BA652D22CA8F0052C3EE /* Components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Components; sourceTree = "<group>"; };
-		E9339F682D2811BD005AEA76 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
-		E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
-		E9339F962D282B39005AEA76 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
-		E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XiblessHostingController.swift; sourceTree = "<group>"; };
-		E94CDF912D227DE5005B69BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		E975C5C52D392E8B0059BE92 /* TestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoordinator.swift; sourceTree = "<group>"; };
-		E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-		E9E06A042D23E897008055CE /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
-		E9E06A052D23E897008055CE /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		E9E06A062D23E897008055CE /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		E9E06A072D23E897008055CE /* LoginWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWindowController.swift; sourceTree = "<group>"; };
-		E9E06A0C2D23E913008055CE /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		E9E06A0E2D23E937008055CE /* AppServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppServices.swift; sourceTree = "<group>"; };
-		E9E06A102D23E95E008055CE /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
-		E9E90AED2D2A5A03001607C9 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		E9E90AEF2D2A5AF4001607C9 /* AppStatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStatusItemController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E9D12F2B3003E29D00B80F26 /* Exceptions for "StarLight" folder in "StarLight" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E91AE1CC2D218FAA0076BD59 /* StarLight */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E9D12F133003E29C00B80F26 /* StarLight */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E9D12F2B3003E29D00B80F26 /* Exceptions for "StarLight" folder in "StarLight" target */,
+			);
+			path = StarLight;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E91AE1CA2D218FAA0076BD59 /* Frameworks */ = {
@@ -90,7 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				E932BA652D22CA8F0052C3EE /* Components */,
-				E91AE1E22D218FAF0076BD59 /* StarLight */,
+				E9D12F133003E29C00B80F26 /* StarLight */,
 				E912A77D2D21A21100E527AD /* Frameworks */,
 				E91AE1CE2D218FAA0076BD59 /* Products */,
 			);
@@ -102,77 +77,6 @@
 				E91AE1CD2D218FAA0076BD59 /* StarLight-Debug.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E91AE1E22D218FAF0076BD59 /* StarLight */ = {
-			isa = PBXGroup;
-			children = (
-				E94CDF912D227DE5005B69BA /* Info.plist */,
-				E975C5CB2D3936DC0059BE92 /* App */,
-				E975C5CD2D3936F30059BE92 /* Base */,
-				E975C5CC2D3936E70059BE92 /* Main */,
-				E975C5C92D3936BE0059BE92 /* Login */,
-				E975C5CA2D3936C50059BE92 /* Settings */,
-				E91AE1DE2D218FAF0076BD59 /* Assets.xcassets */,
-				E91AE1E02D218FAF0076BD59 /* MainMenu.xib */,
-				E91AE1E12D218FAF0076BD59 /* StarLight.entitlements */,
-			);
-			path = StarLight;
-			sourceTree = "<group>";
-		};
-		E975C5C92D3936BE0059BE92 /* Login */ = {
-			isa = PBXGroup;
-			children = (
-				E9E06A042D23E897008055CE /* LoginCoordinator.swift */,
-				E9E06A072D23E897008055CE /* LoginWindowController.swift */,
-				E9E06A052D23E897008055CE /* LoginViewController.swift */,
-				E9E06A062D23E897008055CE /* LoginViewModel.swift */,
-			);
-			path = Login;
-			sourceTree = "<group>";
-		};
-		E975C5CA2D3936C50059BE92 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				E9E90AED2D2A5A03001607C9 /* Settings.swift */,
-				E913AE782D25993C0027ACA1 /* SettingsCoordinator.swift */,
-				E9339F982D282BE2005AEA76 /* SettingsWindowController.swift */,
-				E9339F962D282B39005AEA76 /* SettingsViewController.swift */,
-				E975C5CE2D3937280059BE92 /* SettingsViewModel.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		E975C5CB2D3936DC0059BE92 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				E91AE1DD2D218FAF0076BD59 /* AppDelegate.swift */,
-				E9E06A0E2D23E937008055CE /* AppServices.swift */,
-				E9E06A102D23E95E008055CE /* AppCoordinator.swift */,
-				E9E90AEF2D2A5AF4001607C9 /* AppStatusItemController.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		E975C5CC2D3936E70059BE92 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				E9339F682D2811BD005AEA76 /* MainCoordinator.swift */,
-				E929DE742D4143B1009F4020 /* MainActionBarController.swift */,
-				E929DE722D414389009F4020 /* MainActionBarCellView.swift */,
-			);
-			path = Main;
-			sourceTree = "<group>";
-		};
-		E975C5CD2D3936F30059BE92 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				E9E06A0C2D23E913008055CE /* ViewModel.swift */,
-				E975C5C52D392E8B0059BE92 /* TestCoordinator.swift */,
-				E9339F9A2D282C12005AEA76 /* XiblessHostingController.swift */,
-				E9339F942D282B09005AEA76 /* KeyboardShortcuts.swift */,
-			);
-			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,6 +93,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E9D12F133003E29C00B80F26 /* StarLight */,
 			);
 			name = StarLight;
 			packageProductDependencies = (
@@ -242,8 +149,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E91AE1E42D218FAF0076BD59 /* Assets.xcassets in Resources */,
-				E91AE1E52D218FAF0076BD59 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,41 +159,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E91AE1E32D218FAF0076BD59 /* AppDelegate.swift in Sources */,
-				E9339F972D282B39005AEA76 /* SettingsViewController.swift in Sources */,
-				E9339F992D282BE2005AEA76 /* SettingsWindowController.swift in Sources */,
-				E9E06A082D23E897008055CE /* LoginViewController.swift in Sources */,
-				E9E06A0F2D23E937008055CE /* AppServices.swift in Sources */,
-				E975C5C62D392E8B0059BE92 /* TestCoordinator.swift in Sources */,
-				E9339F9B2D282C12005AEA76 /* XiblessHostingController.swift in Sources */,
-				E9E06A092D23E897008055CE /* LoginViewModel.swift in Sources */,
-				E9E06A112D23E95E008055CE /* AppCoordinator.swift in Sources */,
-				E9E06A0A2D23E897008055CE /* LoginWindowController.swift in Sources */,
-				E9E90AEE2D2A5A03001607C9 /* Settings.swift in Sources */,
-				E9339F952D282B09005AEA76 /* KeyboardShortcuts.swift in Sources */,
-				E9339F692D2811BD005AEA76 /* MainCoordinator.swift in Sources */,
-				E9E90AF02D2A5AF4001607C9 /* AppStatusItemController.swift in Sources */,
-				E929DE732D414389009F4020 /* MainActionBarCellView.swift in Sources */,
-				E9E06A0D2D23E913008055CE /* ViewModel.swift in Sources */,
-				E929DE752D4143B1009F4020 /* MainActionBarController.swift in Sources */,
-				E913AE792D25993C0027ACA1 /* SettingsCoordinator.swift in Sources */,
-				E9E06A0B2D23E897008055CE /* LoginCoordinator.swift in Sources */,
-				E975C5CF2D3937280059BE92 /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		E91AE1E02D218FAF0076BD59 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E91AE1DF2D218FAF0076BD59 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E91AE1D82D218FAB0076BD59 /* Debug */ = {
@@ -427,8 +301,17 @@
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StarLight/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -461,8 +344,17 @@
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StarLight/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";

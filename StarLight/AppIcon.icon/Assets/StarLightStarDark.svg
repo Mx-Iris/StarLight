@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1096 1096">
+  <title>StarLight Star Dark</title>
+  <defs>
+    <linearGradient id="starFace" x1="0.22" y1="0.08" x2="0.8" y2="0.92">
+      <stop offset="0" stop-color="#C7EEFF"/>
+      <stop offset="0.46" stop-color="#738DFF"/>
+      <stop offset="1" stop-color="#39358F"/>
+    </linearGradient>
+    <linearGradient id="starHighlight" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#9BDFFF" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="starClip">
+      <path d="M548 198 L636.17 406.65 L861.86 426.02 L690.66 574.35 L741.97 795.98 L548 678 L354.03 795.98 L405.34 574.35 L234.14 426.02 L459.83 406.65 Z"/>
+    </clipPath>
+  </defs>
+  <path
+    d="M548 198 L636.17 406.65 L861.86 426.02 L690.66 574.35 L741.97 795.98 L548 678 L354.03 795.98 L405.34 574.35 L234.14 426.02 L459.83 406.65 Z"
+    fill="url(#starFace)"
+    stroke="#DDF6FF"
+    stroke-width="42"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M194 190 H902 V474 C770 419 652 396 548 396 C444 396 326 419 194 474 Z"
+    fill="url(#starHighlight)"
+    clip-path="url(#starClip)"
+    opacity="0.48"
+  />
+  <path
+    d="M548 232 L625 414 L822 431"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="10"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.32"
+  />
+</svg>

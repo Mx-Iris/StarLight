@@ -18,7 +18,7 @@ final class MainActionBarController: NSObject {
 
     let appServices: AppServices
 
-    private var stateSubscription: AnyCancellable?
+    private var repositoriesSubscription: AnyCancellable?
 
     private enum PresentationState: Equatable {
         case idle
@@ -36,7 +36,7 @@ final class MainActionBarController: NSObject {
         super.init()
         actionBar.contentSource = self
         actionBar.rowHeight = 60
-        observeRepositoriesState()
+        observeRepositoriesChanges()
     }
 
     /// Matches a repository against a search term by checking multiple fields:
@@ -123,12 +123,12 @@ final class MainActionBarController: NSObject {
         }
     }
 
-    private func observeRepositoriesState() {
+    private func observeRepositoriesChanges() {
         Task {
-            stateSubscription = await appServices.repositoriesService.$state
+            repositoriesSubscription = await appServices.repositoriesService.$repositoriesChangeIdentifier
                 .receive(on: RunLoop.main)
-                .sink { [weak self] state in
-                    guard let self, state == .idle, actionBar.isPresenting else { return }
+                .sink { [weak self] _ in
+                    guard let self, actionBar.isPresenting else { return }
                     Task {
                         let searchTerm = await MainActor.run { self.actionBar.currentSearchText ?? "" }
                         guard !searchTerm.isEmpty else { return }

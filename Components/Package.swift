@@ -66,9 +66,9 @@ let package = Package(
                 isEnabled: true
             ),
             .package(
-                path: "../GitHubServices",
+                path: "../../GitHubServices",
                 isRelative: true,
-                isEnabled: false
+                isEnabled: true
             ),
             remote: .package(
                 url: "https://github.com/Mx-Iris/GitHubServices",
@@ -175,6 +175,10 @@ let package = Package(
             resources: [
                 .process("Resources"),
             ]
+        ),
+        .testTarget(
+            name: "StarLightCoreTests",
+            dependencies: ["StarLightCore"]
         ),
     ],
     swiftLanguageModes: [.v5],

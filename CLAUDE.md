@@ -55,7 +55,7 @@ Each coordinator defines a `Route` enum and a `prepareTransition(for:)` method. 
 
 - **`AppServices`** — simple service locator holding `LoginService` and `RepositoriesService`, injected through coordinators into view models
 - **`ViewModel<Route>`** — base class holding `appServices` and a `router` reference for triggering route transitions
-- **`RepositoriesService`** — Swift actor with `@Published` state, auto-refreshes on timer, persists to `~/Documents/Repositories.json`
+- **`RepositoriesService`** — Swift actor with `@Published` state and repository-change identifiers. It loads the cache before starting network work, probes the newest and last starred-repository pages on the configured timer, performs a serial full refresh only when membership changes or the last full refresh is at least 24 hours old, and gives manual full refreshes priority over automatic probes without overlapping pagination requests. It preserves the repository array in `~/Documents/Repositories.json` and stores user/full-refresh metadata in the companion `RepositoriesMetadata.json` file.
 - **`KeychainStorage`** — uses `@Keychain` property wrapper for token persistence
 - **Menu bar** — `AppStatusItemController` (StatusItemController subclass) builds the menu via `MenuBuilder` DSL
 - **Activation policy** — toggles between `.regular` (shows dock icon + windows) and `.accessory` (menu-bar-only) based on login state and window visibility
@@ -63,7 +63,7 @@ Each coordinator defines a `Route` enum and a `prepareTransition(for:)` method. 
 ### Dependencies (via Components/Package.swift)
 
 The `Package.swift` has a `localPath`/`remotePath` pattern allowing local checkout overrides. Key dependencies:
-- `GitHubServices` (GitHubModels + GitHubNetworking) — GitHub API client
+- `GitHubServices` (GitHubModels + GitHubNetworking) — GitHub API client; local development resolves the sibling `../GitHubServices` checkout before the remote `main` fallback
 - `DSFQuickActionBar` — Spotlight-like search panel
 - `Defaults` — UserDefaults wrapper
 - `KeychainAccess` — Keychain wrapper

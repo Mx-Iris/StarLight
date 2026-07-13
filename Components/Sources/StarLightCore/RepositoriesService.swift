@@ -12,8 +12,8 @@ public actor RepositoriesService {
         get async throws {
             if let fetchRepositoriesTask, !fetchRepositoriesTask.isCancelled {
                 return try await fetchRepositoriesTask.value
-            } else if _repositories.isEmpty {
-                return try await runFetchRepositoriesTask().value
+            } else if _repositories.isEmpty, client.isAuthorized {
+                return try await runFetchRepositoriesTask(forceFullRefresh: true).value
             } else {
                 return _repositories
             }
@@ -27,11 +27,20 @@ public actor RepositoriesService {
     private var _repositories: [Repository] = []
 
     private var client: GitHubClient
+    private var clientGeneration: UInt = 0
+    private var authenticatedUserLogin: String?
+
+    private var cachedAuthenticatedUserLogin: String?
+    private var lastFullRefreshDate: Date?
+    private var repositoryCacheRequiresPersistenceMigration = false
 
     private var tokenCancellable: AnyCancellable?
 
     @Published
     public private(set) var state: State = .idle
+
+    @Published
+    public private(set) var repositoriesChangeIdentifier: UInt = 0
 
     public private(set) var refreshInterval: TimeInterval = 15 {
         didSet {
@@ -43,26 +52,39 @@ public actor RepositoriesService {
         refreshInterval = interval
     }
 
-    private var refreshTimer: Timer?
-
     public enum State {
         case idle
         case fetching
         case loading
     }
 
+    private static let repositoriesPerPage = 100
+    private static let maximumFullRefreshAge: TimeInterval = 24 * 60 * 60
+
     public init() {
-        self.client = .init(token: Keychains.token)
+        client = .init(token: Keychains.token)
         Task {
-            await observeTokenChanges()
-            await setupAutoRefresh()
-            await loadRepositories()
+            await initialize()
         }
     }
 
     deinit {
         refreshLoopTask?.cancel()
+        fetchRepositoriesTask?.cancel()
         tokenCancellable?.cancel()
+    }
+
+    private func initialize() {
+        state = .loading
+        loadRepositories()
+        state = .idle
+
+        observeTokenChanges()
+        setupAutoRefresh()
+
+        if Keychains.token != nil {
+            runFetchRepositoriesTask(forceFullRefresh: false)
+        }
     }
 
     private func observeTokenChanges() {
@@ -75,14 +97,18 @@ public actor RepositoriesService {
     }
 
     private func updateClient(for token: Token?) {
+        clientGeneration &+= 1
+        fetchRepositoriesTask?.cancel()
         client = .init(token: token)
+        authenticatedUserLogin = nil
+
         if token != nil {
-            runFetchRepositoriesTask()
+            runFetchRepositoriesTask(forceFullRefresh: false)
         }
     }
 
     public func refresh() {
-        runFetchRepositoriesTask()
+        runFetchRepositoriesTask(forceFullRefresh: true)
     }
 
     private var refreshLoopTask: Task<Void, Never>?
@@ -90,58 +116,288 @@ public actor RepositoriesService {
     private func setupAutoRefresh() {
         refreshLoopTask?.cancel()
 
-        let intervalNano = UInt64(refreshInterval * 60 * 1_000_000_000)
+        let refreshIntervalNanoseconds = UInt64(refreshInterval * 60 * 1_000_000_000)
 
         refreshLoopTask = Task { [weak self] in
             while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: intervalNano)
+                try? await Task.sleep(nanoseconds: refreshIntervalNanoseconds)
                 guard let self else { return }
                 if Task.isCancelled { return }
 
-                await runFetchRepositoriesTask()
+                await runFetchRepositoriesTask(forceFullRefresh: false)
             }
         }
     }
 
     private var fetchRepositoriesTask: Task<[Repository], Error>?
+    private var fetchRepositoriesRequestIdentifier: UInt = 0
+    private var fetchRepositoriesTaskPerformsFullRefresh = false
 
     @discardableResult
-    private func runFetchRepositoriesTask() -> Task<[Repository], Error> {
-        if let fetchRepositoriesTask, !fetchRepositoriesTask.isCancelled {
-            return fetchRepositoriesTask
-        }
-        let task: Task<[Repository], Error> = Task {
-            do {
-                return try await fetchRepositories()
-            } catch {
-                print(error)
-                throw error
+    private func runFetchRepositoriesTask(forceFullRefresh: Bool) -> Task<[Repository], Error> {
+        let taskToAwaitBeforeStarting: Task<[Repository], Error>?
+        if let fetchRepositoriesTask {
+            if !fetchRepositoriesTask.isCancelled {
+                guard RepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
+                    requestedRefreshForcesFullRefresh: forceFullRefresh,
+                    runningRefreshPerformsFullRefresh: fetchRepositoriesTaskPerformsFullRefresh
+                ) else {
+                    return fetchRepositoriesTask
+                }
+                fetchRepositoriesTask.cancel()
             }
+            taskToAwaitBeforeStarting = fetchRepositoriesTask
+        } else {
+            taskToAwaitBeforeStarting = nil
+        }
+
+        fetchRepositoriesRequestIdentifier &+= 1
+        let requestIdentifier = fetchRepositoriesRequestIdentifier
+        let requestClient = client
+        let requestClientGeneration = clientGeneration
+
+        let task = Task { [weak self] () throws -> [Repository] in
+            guard let self else { throw CancellationError() }
+            return try await self.executeFetchRepositoriesTask(
+                forceFullRefresh: forceFullRefresh,
+                requestIdentifier: requestIdentifier,
+                requestClient: requestClient,
+                requestClientGeneration: requestClientGeneration,
+                taskToAwaitBeforeStarting: taskToAwaitBeforeStarting
+            )
         }
         fetchRepositoriesTask = task
+        fetchRepositoriesTaskPerformsFullRefresh = forceFullRefresh
         return task
     }
 
-    private func fetchRepositories() async throws -> [Repository] {
+    private func executeFetchRepositoriesTask(
+        forceFullRefresh: Bool,
+        requestIdentifier: UInt,
+        requestClient: GitHubClient,
+        requestClientGeneration: UInt,
+        taskToAwaitBeforeStarting: Task<[Repository], Error>?
+    ) async throws -> [Repository] {
         state = .fetching
         defer {
-            state = .idle
-            fetchRepositoriesTask = nil
+            if requestIdentifier == fetchRepositoriesRequestIdentifier {
+                state = .idle
+                fetchRepositoriesTask = nil
+                fetchRepositoriesTaskPerformsFullRefresh = false
+            }
         }
+
+        if let taskToAwaitBeforeStarting {
+            _ = try? await taskToAwaitBeforeStarting.value
+            try ensureRequestIsCurrent(requestClientGeneration)
+        }
+
         do {
-            let user = try await client.authenticatedUser()
-            let repositories = try await client.allUserStarredRepositories(username: user.login, sort: .created, direction: .asc)
-            _repositories = repositories
-            await saveRepositories()
-            return repositories
-        } catch let error as APIError {
-            if case .serverError(let response) = error, Self.isAuthenticationFailure(message: response.message) {
-                Keychains.token = nil
-                await MainActor.run {
-                    NotificationCenter.default.post(name: .repositoriesServiceAuthenticationFailed, object: nil)
-                }
+            return try await fetchRepositories(
+                forceFullRefresh: forceFullRefresh,
+                requestClient: requestClient,
+                requestClientGeneration: requestClientGeneration
+            )
+        } catch {
+            if !(error is CancellationError) {
+                print(error)
+                await handleAuthenticationFailureIfNeeded(error)
             }
             throw error
+        }
+    }
+
+    private func fetchRepositories(
+        forceFullRefresh: Bool,
+        requestClient: GitHubClient,
+        requestClientGeneration: UInt
+    ) async throws -> [Repository] {
+        try ensureRequestIsCurrent(requestClientGeneration)
+
+        let currentAuthenticatedUserLogin = try await resolveAuthenticatedUserLogin(
+            requestClient: requestClient,
+            requestClientGeneration: requestClientGeneration
+        )
+        let cacheBelongsToAuthenticatedUser = cachedAuthenticatedUserLogin == currentAuthenticatedUserLogin
+
+        if !cacheBelongsToAuthenticatedUser {
+            setRepositories([])
+            cachedAuthenticatedUserLogin = currentAuthenticatedUserLogin
+            lastFullRefreshDate = nil
+        }
+
+        let firstPageResponse = try await fetchRepositoriesPage(
+            pageNumber: 1,
+            requestClient: requestClient,
+            requestClientGeneration: requestClientGeneration
+        )
+
+        let currentDate = Date()
+        let shouldPerformFullRefresh = forceFullRefresh
+            || !cacheBelongsToAuthenticatedUser
+            || _repositories.isEmpty
+            || RepositoriesRefreshPolicy.shouldPerformFullRefresh(
+                lastFullRefreshDate: lastFullRefreshDate,
+                currentDate: currentDate,
+                maximumFullRefreshAge: Self.maximumFullRefreshAge
+            )
+
+        if shouldPerformFullRefresh {
+            fetchRepositoriesTaskPerformsFullRefresh = true
+            return try await performFullRefresh(
+                firstPageResponse: firstPageResponse,
+                authenticatedUserLogin: currentAuthenticatedUserLogin,
+                requestClient: requestClient,
+                requestClientGeneration: requestClientGeneration
+            )
+        }
+
+        let membershipChanged = try await repositoryMembershipChanged(
+            firstPageResponse: firstPageResponse,
+            requestClient: requestClient,
+            requestClientGeneration: requestClientGeneration
+        )
+
+        if membershipChanged {
+            fetchRepositoriesTaskPerformsFullRefresh = true
+            return try await performFullRefresh(
+                firstPageResponse: firstPageResponse,
+                authenticatedUserLogin: currentAuthenticatedUserLogin,
+                requestClient: requestClient,
+                requestClientGeneration: requestClientGeneration
+            )
+        }
+
+        if repositoryCacheRequiresPersistenceMigration {
+            saveRepositories()
+        }
+        return _repositories
+    }
+
+    private func resolveAuthenticatedUserLogin(
+        requestClient: GitHubClient,
+        requestClientGeneration: UInt
+    ) async throws -> String {
+        if let authenticatedUserLogin {
+            return authenticatedUserLogin
+        }
+
+        let user = try await requestClient.authenticatedUser()
+        try ensureRequestIsCurrent(requestClientGeneration)
+        authenticatedUserLogin = user.login
+        return user.login
+    }
+
+    private func repositoryMembershipChanged(
+        firstPageResponse: PaginatedResponse<Repository>,
+        requestClient: GitHubClient,
+        requestClientGeneration: UInt
+    ) async throws -> Bool {
+        let lastPageNumber: Int
+        if let responseLastPageNumber = firstPageResponse.lastPageNumber {
+            lastPageNumber = responseLastPageNumber
+        } else if firstPageResponse.nextPageNumber == nil {
+            lastPageNumber = 1
+        } else {
+            return true
+        }
+
+        let remoteRepositoryCount: Int
+        if lastPageNumber == 1 {
+            remoteRepositoryCount = firstPageResponse.elements.count
+        } else {
+            let lastPageResponse = try await fetchRepositoriesPage(
+                pageNumber: lastPageNumber,
+                requestClient: requestClient,
+                requestClientGeneration: requestClientGeneration
+            )
+            remoteRepositoryCount = ((lastPageNumber - 1) * Self.repositoriesPerPage) + lastPageResponse.elements.count
+        }
+
+        return RepositoriesRefreshPolicy.repositoryMembershipChanged(
+            cachedRepositoryNames: _repositories.map(\.fullname),
+            firstPageRepositoryNames: firstPageResponse.elements.map(\.fullname),
+            remoteRepositoryCount: remoteRepositoryCount
+        )
+    }
+
+    private func performFullRefresh(
+        firstPageResponse: PaginatedResponse<Repository>,
+        authenticatedUserLogin: String,
+        requestClient: GitHubClient,
+        requestClientGeneration: UInt
+    ) async throws -> [Repository] {
+        mergeFirstPageIntoCachedRepositories(firstPageResponse.elements)
+
+        var fetchedRepositories = firstPageResponse.elements
+        var currentPageResponse = firstPageResponse
+
+        while let nextPageNumber = currentPageResponse.nextPageNumber {
+            currentPageResponse = try await fetchRepositoriesPage(
+                pageNumber: nextPageNumber,
+                requestClient: requestClient,
+                requestClientGeneration: requestClientGeneration
+            )
+            fetchedRepositories.append(contentsOf: currentPageResponse.elements)
+        }
+
+        setRepositories(fetchedRepositories)
+        cachedAuthenticatedUserLogin = authenticatedUserLogin
+        lastFullRefreshDate = Date()
+        saveRepositories()
+        return fetchedRepositories
+    }
+
+    private func fetchRepositoriesPage(
+        pageNumber: Int,
+        requestClient: GitHubClient,
+        requestClientGeneration: UInt
+    ) async throws -> PaginatedResponse<Repository> {
+        let response = try await requestClient.authenticatedUserStarredRepositories(
+            sort: .created,
+            direction: .desc,
+            numberOfPerPage: Self.repositoriesPerPage,
+            page: pageNumber,
+            entityTag: nil
+        )
+        try ensureRequestIsCurrent(requestClientGeneration)
+
+        guard !response.isNotModified else {
+            throw RepositoriesServiceError.unexpectedNotModifiedResponse
+        }
+        return response
+    }
+
+    private func ensureRequestIsCurrent(_ requestClientGeneration: UInt) throws {
+        try Task.checkCancellation()
+        guard requestClientGeneration == clientGeneration else {
+            throw CancellationError()
+        }
+    }
+
+    private func mergeFirstPageIntoCachedRepositories(_ firstPageRepositories: [Repository]) {
+        let firstPageRepositoryNames = Set(firstPageRepositories.map(\.fullname))
+        let remainingCachedRepositories = _repositories.filter {
+            !firstPageRepositoryNames.contains($0.fullname)
+        }
+        setRepositories(firstPageRepositories + remainingCachedRepositories)
+    }
+
+    private func setRepositories(_ repositories: [Repository]) {
+        _repositories = repositories
+        repositoriesChangeIdentifier &+= 1
+    }
+
+    private func handleAuthenticationFailureIfNeeded(_ error: Error) async {
+        guard let error = error as? APIError,
+              case .serverError(let response) = error,
+              Self.isAuthenticationFailure(message: response.message) else {
+            return
+        }
+
+        Keychains.token = nil
+        await MainActor.run {
+            NotificationCenter.default.post(name: .repositoriesServiceAuthenticationFailed, object: nil)
         }
     }
 
@@ -156,39 +412,78 @@ public actor RepositoriesService {
         return authenticationFailureMessages.contains(where: { message.localizedCaseInsensitiveContains($0) })
     }
 
-    @concurrent
-    private func loadRepositories() async {
-        await setState(.loading)
-        defer {
-            Task {
-                await setState(.idle)
+    private struct RepositoryCacheEnvelope: Codable {
+        let repositories: [Repository]
+        let authenticatedUserLogin: String?
+        let lastFullRefreshDate: Date?
+    }
+
+    private struct RepositoryCacheMetadata: Codable {
+        let authenticatedUserLogin: String?
+        let lastFullRefreshDate: Date?
+    }
+
+    private func loadRepositories() {
+        do {
+            let data = try Data(contentsOf: storageURL)
+            let decoder = JSONDecoder()
+
+            if let repositories = try? decoder.decode([Repository].self, from: data) {
+                setRepositories(repositories)
+                repositoryCacheRequiresPersistenceMigration = false
+                loadRepositoryCacheMetadata(using: decoder)
+            } else if let repositoryCacheEnvelope = try? decoder.decode(RepositoryCacheEnvelope.self, from: data) {
+                setRepositories(repositoryCacheEnvelope.repositories)
+                cachedAuthenticatedUserLogin = repositoryCacheEnvelope.authenticatedUserLogin
+                lastFullRefreshDate = repositoryCacheEnvelope.lastFullRefreshDate
+                repositoryCacheRequiresPersistenceMigration = true
+            } else {
+                setRepositories(try decoder.decode([Repository].self, from: data))
             }
-        }
-        do {
-            try await setRepositories(await JSONDecoder().decode([Repository].self, from: Data(contentsOf: storageURL)))
         } catch {
             print(error)
         }
     }
 
-    @concurrent
-    private func saveRepositories() async {
+    private func loadRepositoryCacheMetadata(using decoder: JSONDecoder) {
         do {
-            try await JSONEncoder().encode(_repositories).write(to: storageURL)
+            let metadata = try decoder.decode(
+                RepositoryCacheMetadata.self,
+                from: Data(contentsOf: metadataStorageURL)
+            )
+            cachedAuthenticatedUserLogin = metadata.authenticatedUserLogin
+            lastFullRefreshDate = metadata.lastFullRefreshDate
         } catch {
-            print(error)
+            cachedAuthenticatedUserLogin = nil
+            lastFullRefreshDate = nil
         }
     }
 
-    private func setState(_ state: State) async {
-        self.state = state
-    }
+    private func saveRepositories() {
+        let metadata = RepositoryCacheMetadata(
+            authenticatedUserLogin: cachedAuthenticatedUserLogin,
+            lastFullRefreshDate: lastFullRefreshDate
+        )
 
-    private func setRepositories(_ repositories: [Repository]) async {
-        _repositories = repositories
+        do {
+            let encoder = JSONEncoder()
+            try encoder.encode(_repositories).write(to: storageURL, options: .atomic)
+            try encoder.encode(metadata).write(to: metadataStorageURL, options: .atomic)
+            repositoryCacheRequiresPersistenceMigration = false
+        } catch {
+            print(error)
+        }
     }
 
     private var storageURL: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "Repositories.json")
+    }
+
+    private var metadataStorageURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "RepositoriesMetadata.json")
+    }
+
+    private enum RepositoriesServiceError: Error {
+        case unexpectedNotModifiedResponse
     }
 }

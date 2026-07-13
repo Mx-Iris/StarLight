@@ -12,12 +12,24 @@ import GitHubModels
 import UIFoundation
 import Defaults
 
+@MainActor
 final class MainActionBarController: NSObject {
     let actionBar = QuickActionBar()
 
     let appServices: AppServices
 
     private var stateSubscription: AnyCancellable?
+
+    private enum PresentationState: Equatable {
+        case idle
+        case preparing(requestIdentifier: UInt)
+        case presented
+        case dismissing
+    }
+
+    private var presentationState: PresentationState = .idle
+    private var presentationPreparationTask: Task<Void, Never>?
+    private var nextPresentationRequestIdentifier: UInt = 0
 
     init(appServices: AppServices) {
         self.appServices = appServices
@@ -43,18 +55,72 @@ final class MainActionBarController: NSObject {
     }
 
     func present() {
-        actionBar.cancel()
-        Task {
-            let hasCache = await !appServices.repositoriesService.cachedRepositories.isEmpty
-            let placeholder = hasCache ? "Search Starred Repositories" : "Loading repositories..."
-            await MainActor.run {
-                actionBar.present(placeholderText: placeholder, width: Defaults[.windowWidth], height: Defaults[.windowHeight])
+        switch presentationState {
+        case .idle:
+            preparePresentation()
+        case .preparing:
+            cancel()
+        case .presented:
+            if actionBar.resumePresentation() {
+                return
             }
+
+            presentationState = .dismissing
+            actionBar.cancel()
+        case .dismissing:
+            guard actionBar.resumePresentation() else { return }
+            presentationState = .presented
         }
     }
 
     func cancel() {
-        actionBar.cancel()
+        presentationPreparationTask?.cancel()
+        presentationPreparationTask = nil
+
+        if actionBar.isPresenting {
+            presentationState = .dismissing
+            actionBar.cancel()
+        } else {
+            presentationState = .idle
+        }
+    }
+
+    private func preparePresentation() {
+        nextPresentationRequestIdentifier &+= 1
+        let presentationRequestIdentifier = nextPresentationRequestIdentifier
+        presentationState = .preparing(requestIdentifier: presentationRequestIdentifier)
+
+        presentationPreparationTask = Task { [weak self] in
+            guard let self else { return }
+            let hasCachedRepositories = await !appServices.repositoriesService.cachedRepositories.isEmpty
+            guard !Task.isCancelled else { return }
+
+            let placeholderText = hasCachedRepositories ? "Search Starred Repositories" : "Loading repositories..."
+            guard presentationState == .preparing(requestIdentifier: presentationRequestIdentifier) else { return }
+
+            presentationPreparationTask = nil
+            presentationState = .presented
+            actionBar.present(
+                placeholderText: placeholderText,
+                width: Defaults[.windowWidth],
+                height: Defaults[.windowHeight]
+            ) { [weak self] in
+                self?.handleActionBarDidClose()
+            }
+
+            if !actionBar.isPresenting {
+                presentationState = .idle
+            }
+        }
+    }
+
+    private func handleActionBarDidClose() {
+        switch presentationState {
+        case .presented, .dismissing:
+            presentationState = .idle
+        case .idle, .preparing:
+            break
+        }
     }
 
     private func observeRepositoriesState() {
@@ -79,7 +145,7 @@ final class MainActionBarController: NSObject {
     }
 }
 
-extension MainActionBarController: QuickActionBarContentSource {
+extension MainActionBarController: @MainActor QuickActionBarContentSource {
     func quickActionBar(_ quickActionBar: QuickActionBar, viewForItem item: AnyHashable, searchTerm: String) -> NSView? {
         guard let repository = item as? Repository else { return nil }
         return NSHostingView(rootView: MainActionBarCellView(repository: repository))

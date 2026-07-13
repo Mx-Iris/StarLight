@@ -61,12 +61,13 @@ Each coordinator defines a `Route` enum and a `prepareTransition(for:)` method. 
 - **`KeychainStorage`** — uses `@Keychain` property wrapper for token persistence
 - **Menu bar** — `AppStatusItemController` (StatusItemController subclass) builds the menu via `MenuBuilder` DSL
 - **Activation policy** — toggles between `.regular` (shows dock icon + windows) and `.accessory` (menu-bar-only) based on login state and window visibility
+- **Quick action bar lifecycle** — `MainActionBarController` 区分 preparation、presented 与 dismissing；dismissing 期间再次触发快捷键时调用 `QuickActionBar.resumePresentation()`，在同一个 panel 上反向接续动画，不等待 `didClose` 后重建。
 
 ### Dependencies (via Components/Package.swift)
 
 The `Package.swift` has a `localPath`/`remotePath` pattern allowing local checkout overrides. Key dependencies:
 - `GitHubServices` (GitHubModels + GitHubNetworking) — GitHub API client
-- `DSFQuickActionBar` — Spotlight-like search panel
+- `UIFoundation`（启用 `QuickActionBar` trait）— 提供 Spotlight-like search panel；本地开发优先解析 `/Volumes/Code/Personal/UIFoundation`，路径不存在时回退到远程 `main` branch
 - `Defaults` — UserDefaults wrapper
 - `KeychainAccess` — Keychain wrapper
 - `CocoaCoordinator` — coordinator pattern framework, resolved from the local macOS library checkout during development with `main` as the remote fallback

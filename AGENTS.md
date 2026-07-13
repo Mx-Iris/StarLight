@@ -67,7 +67,7 @@ Each coordinator defines a `Route` enum and a `prepareTransition(for:)` method. 
 
 The `Package.swift` has a `localPath`/`remotePath` pattern allowing local checkout overrides. Key dependencies:
 - `GitHubServices` (GitHubModels + GitHubNetworking) — GitHub API client
-- `UIFoundation`（启用 `QuickActionBar` trait）— 提供 Spotlight-like search panel；本地开发优先解析 `/Volumes/Code/Personal/UIFoundation`，路径不存在时回退到远程 `main` branch
+- `UIFoundation`（启用 `QuickActionBar` trait）— 提供 Spotlight-like search panel；通过远程 `0.13.0` 或更高兼容版本解析
 - `Defaults` — UserDefaults wrapper
 - `KeychainAccess` — Keychain wrapper
 - `CocoaCoordinator` — coordinator pattern framework, resolved from the local macOS library checkout during development with `main` as the remote fallback

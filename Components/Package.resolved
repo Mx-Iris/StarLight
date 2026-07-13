@@ -1,5 +1,5 @@
 {
-  "originHash" : "bcb2497f5e216e6d23fb9b9c177d8e937fe6231690c8ab0c9817ae5546b6124b",
+  "originHash" : "6e96a47ff65ac13c928b245a546694bbc7fa5c25b091a22bd43fa510ea841b5d",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -38,6 +38,15 @@
       }
     },
     {
+      "identity" : "cocoacoordinator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mx-Iris/CocoaCoordinator",
+      "state" : {
+        "branch" : "main",
+        "revision" : "f375fd171a44f52dfecfd0a775e7f79053d33059"
+      }
+    },
+    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
@@ -62,6 +71,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "dd7d12487d637c71707597a75be84ee3c11f86f9"
+      }
+    },
+    {
+      "identity" : "githubservices",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mx-Iris/GitHubServices",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9f7af7f4e275a40cc3929343adec751f6bd72325"
       }
     },
     {
@@ -303,8 +321,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Mx-Iris/UIFoundation",
       "state" : {
-        "revision" : "959d48f336ef46f97d6d5093c7d456983f2259f7",
-        "version" : "0.12.0"
+        "revision" : "8cd36fb2aa1dac8dfa714c5868aa4c9a6aac35d2",
+        "version" : "0.13.0"
       }
     }
   ],

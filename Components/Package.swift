@@ -84,17 +84,9 @@ let package = Package(
             from: "4.0.0"
         ),
         .package(
-            local: .package(
-                path: "/Volumes/Code/Personal/UIFoundation",
-                isRelative: false,
-                isEnabled: true,
-                traits: ["QuickActionBar"]
-            ),
-            remote: .package(
-                url: "https://github.com/Mx-Iris/UIFoundation",
-                branch: "main",
-                traits: ["QuickActionBar"]
-            )
+            url: "https://github.com/Mx-Iris/UIFoundation",
+            from: "0.13.0",
+            traits: ["QuickActionBar"]
         ),
         .package(
             local: .package(

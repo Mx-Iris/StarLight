@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Mx-Iris/FrameworkToolbox",
       "state" : {
-        "revision" : "61178c630fccf746bc2c13835dade9a7dfb79613",
-        "version" : "0.7.4"
+        "revision" : "4abda76aaaa00ff5f9da86d8c4ed62bc6cfbcbac",
+        "version" : "0.8.0"
       }
     },
     {
@@ -312,8 +312,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Mx-Iris/UIFoundation",
       "state" : {
-        "revision" : "8cd36fb2aa1dac8dfa714c5868aa4c9a6aac35d2",
-        "version" : "0.13.0"
+        "revision" : "c1e24ac51c91442d969965f6694cd5bae88c0c6b",
+        "version" : "0.14.1"
       }
     }
   ],

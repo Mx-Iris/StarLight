@@ -23,7 +23,7 @@ StarLight 原先由根 coordinator 手动维护 Login、Settings 和 Main 的 ch
 
 ## 认证失效流程
 
-`RepositoriesService` 清除无效 token 后发送认证失效通知。notification handler 只触发 `AppRoute.authenticationFailed`，该 route 使用组合 transition 顺序执行：
+`RepositoriesService`（后来更名为 `StarredRepositoriesService`，判定与上报逻辑也抽到了共用的 `AuthenticationFailureReporter`，见 [搜索自己的仓库与组织仓库](PersonalRepositoriesSearch.md)）清除无效 token 后发送认证失效通知。notification handler 只触发 `AppRoute.authenticationFailed`，该 route 使用组合 transition 顺序执行：
 
 1. 通过 `MainRoute.cancel` 关闭 quick action bar。
 2. 若 Settings scene 正在显示，通过 `SettingsRoute.dismiss` 关闭窗口，但不触发用户主动 logout 的 delegate 回调。

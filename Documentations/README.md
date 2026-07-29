@@ -17,4 +17,6 @@ StarLight 的设计与演进记录。这些是面向维护者的内部文档，�
 | [AuthFlowRefactor.md](AuthFlowRefactor.md) | 认证从 OAuth Web Flow 切到 Device Flow 的动机、改动范围和取舍（目标版本 v1.7）。解释了为什么不再有 client secret，以及"多设备只能登一台"问题是怎么消失的。 |
 | [AuthenticationRoutingRefactor.md](AuthenticationRoutingRefactor.md) | 认证失效处理与 coordinator 生命周期的重构：认证门控为什么收敛到根 coordinator，以及为什么不该再手动 `addChild` / `removeChild`。 |
 | [StarredRepositoriesRefreshOptimization.md](StarredRepositoriesRefreshOptimization.md) | starred repositories 刷新策略：轻量成员探测、串行完整刷新、手动刷新抢占规则，以及缓存文件格式的兼容处理。 |
+| [PersonalRepositoriesSearch.md](PersonalRepositoriesSearch.md) | 搜索自己的仓库与组织仓库：为什么要三个端点、为什么私有仓库做成可选开关（GitHub 没有只读的私有仓库 scope）、以及一批消除歧义的重命名。 |
+| [RepositorySearchMatching.md](RepositorySearchMatching.md) | 搜索栏的匹配与排序规则：GitHub 网页端 "Search stars" 的实测行为、本地复刻时的两处偏离（不搜 owner、CJK 退回子串），以及为什么必须预建索引。 |
 | [ReleaseCI.md](ReleaseCI.md) | 发布流程：GitHub Actions 如何签名、公证、打包并发布 Release，本地怎么用同一份 `scripts/release.sh` 跑，以及 release notes 的硬性前置条件。 |

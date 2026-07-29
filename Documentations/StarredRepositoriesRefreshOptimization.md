@@ -48,6 +48,8 @@ StarLight 原先每隔 15 分钟串行拉取完整的 starred repositories 列�
 
 加载时也兼容曾经写入 `Repositories.json` 的 envelope 过渡格式；下一次成功刷新会重新拆分为 array 和 metadata file。只有 array、尚无 metadata 的旧缓存会被视为尚未关联用户，并在下一次成功完整刷新后补齐 metadata。
 
+> **后续变更**：加入第二个仓库集合后，这两个文件更名为 `StarredRepositories.json` / `StarredRepositoriesMetadata.json`，首次启动时由 `RepositoryCacheLocation.migrateLegacyStorage` 自动搬迁，见 [搜索自己的仓库与组织仓库](PersonalRepositoriesSearch.md)。上面「保留文件名以便 downgrade 后仍能读到缓存」的理由因此不再成立：降级到 1.7 及更早版本会读不到缓存，代价是一次完整重新抓取。上述格式兼容逻辑本身（array 与 envelope 两种格式）保持不变。
+
 ### GitHubServices 支持
 
 本地 `GitHubServices` 新增 authenticated `/user/starred` 分页 API。它返回 repository elements、`next`/`last` page number、`ETag` 和 `304 Not Modified` 状态，并在专用后台队列完成大页 JSON 解码。旧 API 的 callback queue 约定保持不变。

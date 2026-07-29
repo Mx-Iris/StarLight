@@ -2,10 +2,10 @@ import Foundation
 import Testing
 @testable import StarLightCore
 
-struct RepositoriesRefreshPolicyTests {
+struct StarredRepositoriesRefreshPolicyTests {
     @Test
     func requiresFullRefreshWithoutPreviousRefreshDate() {
-        #expect(RepositoriesRefreshPolicy.shouldPerformFullRefresh(
+        #expect(StarredRepositoriesRefreshPolicy.shouldPerformFullRefresh(
             lastFullRefreshDate: nil,
             currentDate: Date(timeIntervalSince1970: 1_000),
             maximumFullRefreshAge: 100
@@ -14,7 +14,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func requiresFullRefreshWhenMaximumAgeIsReached() {
-        #expect(RepositoriesRefreshPolicy.shouldPerformFullRefresh(
+        #expect(StarredRepositoriesRefreshPolicy.shouldPerformFullRefresh(
             lastFullRefreshDate: Date(timeIntervalSince1970: 900),
             currentDate: Date(timeIntervalSince1970: 1_000),
             maximumFullRefreshAge: 100
@@ -23,7 +23,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func keepsLightweightRefreshWithinMaximumAge() {
-        #expect(!RepositoriesRefreshPolicy.shouldPerformFullRefresh(
+        #expect(!StarredRepositoriesRefreshPolicy.shouldPerformFullRefresh(
             lastFullRefreshDate: Date(timeIntervalSince1970: 901),
             currentDate: Date(timeIntervalSince1970: 1_000),
             maximumFullRefreshAge: 100
@@ -32,7 +32,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func detectsRepositoryCountChanges() {
-        #expect(RepositoriesRefreshPolicy.repositoryMembershipChanged(
+        #expect(StarredRepositoriesRefreshPolicy.repositoryMembershipChanged(
             cachedRepositoryNames: ["owner/first", "owner/second"],
             firstPageRepositoryNames: ["owner/first"],
             remoteRepositoryCount: 1
@@ -41,7 +41,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func detectsNewestRepositoryChanges() {
-        #expect(RepositoriesRefreshPolicy.repositoryMembershipChanged(
+        #expect(StarredRepositoriesRefreshPolicy.repositoryMembershipChanged(
             cachedRepositoryNames: ["owner/first", "owner/second"],
             firstPageRepositoryNames: ["owner/new"],
             remoteRepositoryCount: 2
@@ -50,7 +50,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func acceptsMatchingRepositoryMembership() {
-        #expect(!RepositoriesRefreshPolicy.repositoryMembershipChanged(
+        #expect(!StarredRepositoriesRefreshPolicy.repositoryMembershipChanged(
             cachedRepositoryNames: ["owner/first", "owner/second"],
             firstPageRepositoryNames: ["owner/first"],
             remoteRepositoryCount: 2
@@ -59,7 +59,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func replacesAutomaticRefreshWithManualFullRefresh() {
-        #expect(RepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
+        #expect(StarredRepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
             requestedRefreshForcesFullRefresh: true,
             runningRefreshPerformsFullRefresh: false
         ))
@@ -67,7 +67,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func reusesRunningFullRefreshForManualRefresh() {
-        #expect(!RepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
+        #expect(!StarredRepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
             requestedRefreshForcesFullRefresh: true,
             runningRefreshPerformsFullRefresh: true
         ))
@@ -75,7 +75,7 @@ struct RepositoriesRefreshPolicyTests {
 
     @Test
     func reusesRunningAutomaticRefreshForAnotherAutomaticRefresh() {
-        #expect(!RepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
+        #expect(!StarredRepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
             requestedRefreshForcesFullRefresh: false,
             runningRefreshPerformsFullRefresh: false
         ))

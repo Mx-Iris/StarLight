@@ -12,19 +12,30 @@ import StarLightResources
 import Defaults
 
 struct MainActionBarCellView: View {
+    /// The point size the owner avatar is drawn at.
+    private static let avatarSideLength: CGFloat = 30
+
+    /// GitHub serves avatars at 460x460, and scaling that down to `avatarSideLength` in a single
+    /// drawing pass aliases badly on detailed icons. Decoding a thumbnail first hands the renderer
+    /// a source only a couple of times larger than the destination, which samples down cleanly.
+    private static let avatarThumbnailPixelSize = CGSize(width: 120, height: 120)
+
     var repository: Repository
 
     @Default(.showRepositoryDescription)
     var showRepositoryDescription
-    
+
     var body: some View {
         HStack(spacing: 10) {
             WebImage(
                 url: repository.owner?.avatarURL,
+                context: [.imageThumbnailPixelSize: Self.avatarThumbnailPixelSize],
                 content: { image in
                     image
                         .resizable()
-                        .frame(maxWidth: 30, maxHeight: 30)
+                        .interpolation(.high)
+                        .antialiased(true)
+                        .aspectRatio(contentMode: .fit)
                         .cornerRadius(5)
                 },
                 placeholder: {
@@ -32,12 +43,17 @@ struct MainActionBarCellView: View {
                         .controlSize(.regular)
                 }
             )
-            .frame(maxWidth: 30, maxHeight: 30)
+            .frame(width: Self.avatarSideLength, height: Self.avatarSideLength)
             VStack(alignment: .leading, spacing: 5) {
-                HStack {
+                HStack(spacing: 5) {
                     Text(repository.fullname)
                         .font(.system(size: 14))
                         .multilineTextAlignment(.leading)
+                    if repository.isPrivate {
+                        Assets.Octicons.lock16.swiftUIImage
+                            .foregroundColor(.secondary)
+                            .help("Private repository")
+                    }
                     Spacer()
                 }
                 if showRepositoryDescription {

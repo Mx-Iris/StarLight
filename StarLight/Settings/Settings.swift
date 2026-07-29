@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Defaults
+import StarLightCore
 import StarLightUtilities
 
 extension Defaults.Keys {
@@ -10,4 +11,14 @@ extension Defaults.Keys {
     static let windowWidth = Defaults.Key<Double>("windowWidth", default: (NSScreen.main?.frame.width ?? (640 * 4)) / 4.0)
     static let windowHeight = Defaults.Key<Double>("windowHeight", default: (NSScreen.main?.frame.height ?? (320 * 4)) / 4.0)
     static let mainAction = Defaults.Key("mainAction", default: MainAction.openURL)
+    static let searchPersonalRepositories = Defaults.Key("searchPersonalRepositories", default: true)
+    static let includePrivateRepositories = Defaults.Key("includePrivateRepositories", default: false)
+}
+
+extension RepositoryAccessLevel {
+    /// The access level the user's current preferences call for. Sign-in requests it, and Settings
+    /// compares it against what the stored token actually carries.
+    static var preferred: RepositoryAccessLevel {
+        Defaults[.includePrivateRepositories] ? .includingPrivateRepositories : .publicRepositoriesOnly
+    }
 }

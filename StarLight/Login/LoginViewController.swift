@@ -40,10 +40,10 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
             }
 
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
+            if let notice = viewModel.notice {
+                Text(notice.message)
                     .font(.callout)
-                    .foregroundColor(.red)
+                    .foregroundColor(notice.isFailure ? .red : .secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }

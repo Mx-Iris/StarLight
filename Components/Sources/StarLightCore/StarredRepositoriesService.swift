@@ -3,11 +3,7 @@ import Combine
 import GitHubModels
 import GitHubNetworking
 
-extension Foundation.Notification.Name {
-    public static let repositoriesServiceAuthenticationFailed = Foundation.Notification.Name("repositoriesServiceAuthenticationFailed")
-}
-
-public actor RepositoriesService {
+public actor StarredRepositoriesService {
     public var repositories: [Repository] {
         get async throws {
             if let fetchRepositoriesTask, !fetchRepositoriesTask.isCancelled {
@@ -138,7 +134,7 @@ public actor RepositoriesService {
         let taskToAwaitBeforeStarting: Task<[Repository], Error>?
         if let fetchRepositoriesTask {
             if !fetchRepositoriesTask.isCancelled {
-                guard RepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
+                guard StarredRepositoriesRefreshPolicy.shouldReplaceRunningRefresh(
                     requestedRefreshForcesFullRefresh: forceFullRefresh,
                     runningRefreshPerformsFullRefresh: fetchRepositoriesTaskPerformsFullRefresh
                 ) else {
@@ -201,7 +197,7 @@ public actor RepositoriesService {
         } catch {
             if !(error is CancellationError) {
                 print(error)
-                await handleAuthenticationFailureIfNeeded(error)
+                await AuthenticationFailureReporter.reportIfNeeded(error)
             }
             throw error
         }
@@ -236,7 +232,7 @@ public actor RepositoriesService {
         let shouldPerformFullRefresh = forceFullRefresh
             || !cacheBelongsToAuthenticatedUser
             || _repositories.isEmpty
-            || RepositoriesRefreshPolicy.shouldPerformFullRefresh(
+            || StarredRepositoriesRefreshPolicy.shouldPerformFullRefresh(
                 lastFullRefreshDate: lastFullRefreshDate,
                 currentDate: currentDate,
                 maximumFullRefreshAge: Self.maximumFullRefreshAge
@@ -314,7 +310,7 @@ public actor RepositoriesService {
             remoteRepositoryCount = ((lastPageNumber - 1) * Self.repositoriesPerPage) + lastPageResponse.elements.count
         }
 
-        return RepositoriesRefreshPolicy.repositoryMembershipChanged(
+        return StarredRepositoriesRefreshPolicy.repositoryMembershipChanged(
             cachedRepositoryNames: _repositories.map(\.fullname),
             firstPageRepositoryNames: firstPageResponse.elements.map(\.fullname),
             remoteRepositoryCount: remoteRepositoryCount
@@ -363,7 +359,7 @@ public actor RepositoriesService {
         try ensureRequestIsCurrent(requestClientGeneration)
 
         guard !response.isNotModified else {
-            throw RepositoriesServiceError.unexpectedNotModifiedResponse
+            throw StarredRepositoriesServiceError.unexpectedNotModifiedResponse
         }
         return response
     }
@@ -388,30 +384,6 @@ public actor RepositoriesService {
         repositoriesChangeIdentifier &+= 1
     }
 
-    private func handleAuthenticationFailureIfNeeded(_ error: Error) async {
-        guard let error = error as? APIError,
-              case .serverError(let response) = error,
-              Self.isAuthenticationFailure(message: response.message) else {
-            return
-        }
-
-        Keychains.token = nil
-        await MainActor.run {
-            NotificationCenter.default.post(name: .repositoriesServiceAuthenticationFailed, object: nil)
-        }
-    }
-
-    private static let authenticationFailureMessages = [
-        "Bad credentials",
-        "Requires authentication",
-        "Resource not accessible by personal access token",
-    ]
-
-    private static func isAuthenticationFailure(message: String?) -> Bool {
-        guard let message else { return false }
-        return authenticationFailureMessages.contains(where: { message.localizedCaseInsensitiveContains($0) })
-    }
-
     private struct RepositoryCacheEnvelope: Codable {
         let repositories: [Repository]
         let authenticatedUserLogin: String?
@@ -424,6 +396,8 @@ public actor RepositoriesService {
     }
 
     private func loadRepositories() {
+        migrateLegacyStorageIfNeeded()
+
         do {
             let data = try Data(contentsOf: storageURL)
             let decoder = JSONDecoder()
@@ -475,15 +449,35 @@ public actor RepositoriesService {
         }
     }
 
+    private static let storageFileName = "StarredRepositories.json"
+    private static let metadataStorageFileName = "StarredRepositoriesMetadata.json"
+
+    /// Builds up to and including 1.7 wrote these caches under names that did not say which
+    /// repository collection they held. Now that a second collection exists, the files carry the
+    /// `Starred` prefix, and older caches are moved across instead of being refetched.
+    private static let legacyStorageFileName = "Repositories.json"
+    private static let legacyMetadataStorageFileName = "RepositoriesMetadata.json"
+
+    private func migrateLegacyStorageIfNeeded() {
+        RepositoryCacheLocation.migrateLegacyStorage(
+            from: Self.legacyStorageFileName,
+            to: Self.storageFileName
+        )
+        RepositoryCacheLocation.migrateLegacyStorage(
+            from: Self.legacyMetadataStorageFileName,
+            to: Self.metadataStorageFileName
+        )
+    }
+
     private var storageURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "Repositories.json")
+        RepositoryCacheLocation.storageURL(forFileNamed: Self.storageFileName)
     }
 
     private var metadataStorageURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "RepositoriesMetadata.json")
+        RepositoryCacheLocation.storageURL(forFileNamed: Self.metadataStorageFileName)
     }
 
-    private enum RepositoriesServiceError: Error {
+    private enum StarredRepositoriesServiceError: Error {
         case unexpectedNotModifiedResponse
     }
 }

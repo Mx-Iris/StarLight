@@ -11,6 +11,7 @@ import Combine
 import GitHubModels
 import UIFoundation
 import Defaults
+import StarLightCore
 
 @MainActor
 final class MainActionBarController: NSObject {
@@ -18,7 +19,8 @@ final class MainActionBarController: NSObject {
 
     let appServices: AppServices
 
-    private var repositoriesSubscription: AnyCancellable?
+    private var starredRepositoriesSubscription: AnyCancellable?
+    private var personalRepositoriesSubscription: AnyCancellable?
 
     private enum PresentationState: Equatable {
         case idle
@@ -30,6 +32,7 @@ final class MainActionBarController: NSObject {
     private var presentationState: PresentationState = .idle
     private var presentationPreparationTask: Task<Void, Never>?
     private var nextPresentationRequestIdentifier: UInt = 0
+    private var cachedSearchIndex: CachedSearchIndex?
 
     init(appServices: AppServices) {
         self.appServices = appServices
@@ -39,19 +42,44 @@ final class MainActionBarController: NSObject {
         observeRepositoriesChanges()
     }
 
-    /// Matches a repository against a search term by checking multiple fields:
-    /// name, fullname (owner/repo), description, topics, and language.
-    /// Supports multi-word queries where each word must match at least one field.
-    private func repositoryMatchesSearchTerm(_ repository: Repository, searchTerm: String) -> Bool {
-        let words = searchTerm.split(separator: " ").map(String.init)
-        guard !words.isEmpty else { return false }
-        return words.allSatisfy { word in
-            repository.name.localizedCaseInsensitiveContains(word)
-                || repository.fullname.localizedCaseInsensitiveContains(word)
-                || (repository.description?.localizedCaseInsensitiveContains(word) ?? false)
-                || (repository.language?.localizedCaseInsensitiveContains(word) ?? false)
-                || repository.topics.contains(where: { $0.localizedCaseInsensitiveContains(word) })
+    /// The index the quick action bar searches: the user's own and organization repositories ahead
+    /// of their starred ones, deduplicated, with private repositories filtered out unless the user
+    /// asked for them, and every searchable field pre-split into words.
+    ///
+    /// Building it walks the whole collection, which is far too slow to redo on every keystroke, so
+    /// it is cached until the repositories change underneath it — see `observeRepositoriesChanges`.
+    /// The private-repository setting is checked here rather than observed, since it is the other
+    /// input that changes what belongs in the index.
+    private func searchIndex() async -> RepositorySearchIndex {
+        let includingPrivateRepositories = Defaults[.includePrivateRepositories]
+
+        if let cachedSearchIndex, cachedSearchIndex.includedPrivateRepositories == includingPrivateRepositories {
+            return cachedSearchIndex.index
         }
+
+        let personalRepositories = await appServices.personalRepositoriesService.cachedRepositories
+        let starredRepositories = await appServices.starredRepositoriesService.cachedRepositories
+
+        let repositories = RepositorySearchCatalog.merged(
+            personalRepositories: personalRepositories,
+            starredRepositories: starredRepositories,
+            includingPrivateRepositories: includingPrivateRepositories
+        )
+
+        // Splitting thousands of repositories into words would visibly stall the panel if it ran on
+        // the main actor.
+        let index = await Task.detached { RepositorySearchIndex(repositories: repositories) }.value
+
+        cachedSearchIndex = CachedSearchIndex(
+            index: index,
+            includedPrivateRepositories: includingPrivateRepositories
+        )
+        return index
+    }
+
+    private struct CachedSearchIndex {
+        let index: RepositorySearchIndex
+        let includedPrivateRepositories: Bool
     }
 
     func present() {
@@ -92,10 +120,12 @@ final class MainActionBarController: NSObject {
 
         presentationPreparationTask = Task { [weak self] in
             guard let self else { return }
-            let hasCachedRepositories = await !appServices.repositoriesService.cachedRepositories.isEmpty
+            // Presenting the panel is also where the index gets built, so the first keystroke after
+            // it opens searches an index that is already warm.
+            let hasCachedRepositories = await !searchIndex().isEmpty
             guard !Task.isCancelled else { return }
 
-            let placeholderText = hasCachedRepositories ? "Search Starred Repositories" : "Loading repositories..."
+            let placeholderText = hasCachedRepositories ? "Search Repositories" : "Loading repositories..."
             guard presentationState == .preparing(requestIdentifier: presentationRequestIdentifier) else { return }
 
             presentationPreparationTask = nil
@@ -125,22 +155,37 @@ final class MainActionBarController: NSObject {
 
     private func observeRepositoriesChanges() {
         Task {
-            repositoriesSubscription = await appServices.repositoriesService.$repositoriesChangeIdentifier
+            starredRepositoriesSubscription = await appServices.starredRepositoriesService.$repositoriesChangeIdentifier
                 .receive(on: RunLoop.main)
                 .sink { [weak self] _ in
-                    guard let self, actionBar.isPresenting else { return }
-                    Task {
-                        let searchTerm = await MainActor.run { self.actionBar.currentSearchText ?? "" }
-                        guard !searchTerm.isEmpty else { return }
-                        let repos = await self.appServices.repositoriesService.cachedRepositories
-                        let filtered = repos.filter {
-                            self.repositoryMatchesSearchTerm($0, searchTerm: searchTerm)
-                        }
-                        await MainActor.run {
-                            self.actionBar.provideResultIdentifiers(filtered)
-                        }
-                    }
+                    self?.invalidateSearchIndex()
                 }
+
+            personalRepositoriesSubscription = await appServices.personalRepositoriesService.$repositoriesChangeIdentifier
+                .receive(on: RunLoop.main)
+                .sink { [weak self] _ in
+                    self?.invalidateSearchIndex()
+                }
+        }
+    }
+
+    /// Drops the cached index when a collection finishes refreshing behind the panel, and keeps an
+    /// open panel in sync with what the next search will find.
+    private func invalidateSearchIndex() {
+        cachedSearchIndex = nil
+
+        guard actionBar.isPresenting else { return }
+
+        Task { [weak self] in
+            guard let self else { return }
+            let searchTerm = await MainActor.run { self.actionBar.currentSearchText ?? "" }
+            guard !searchTerm.isEmpty else { return }
+
+            let matchingRepositories = await searchIndex().search(matching: searchTerm)
+
+            await MainActor.run {
+                self.actionBar.provideResultIdentifiers(matchingRepositories)
+            }
         }
     }
 }
@@ -157,12 +202,9 @@ extension MainActionBarController: @MainActor QuickActionBarContentSource {
             return
         }
         Task {
-            let repositories = await appServices.repositoriesService.cachedRepositories
-            let filtered = repositories.filter {
-                self.repositoryMatchesSearchTerm($0, searchTerm: task.searchTerm)
-            }
+            let matchingRepositories = await searchIndex().search(matching: task.searchTerm)
             await MainActor.run {
-                task.complete(with: filtered)
+                task.complete(with: matchingRepositories)
             }
         }
     }

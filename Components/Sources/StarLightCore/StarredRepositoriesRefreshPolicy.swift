@@ -1,6 +1,6 @@
 import Foundation
 
-struct RepositoriesRefreshPolicy {
+struct StarredRepositoriesRefreshPolicy {
     static func shouldPerformFullRefresh(
         lastFullRefreshDate: Date?,
         currentDate: Date,

@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import GitHubModels
 import GitHubNetworking
 
@@ -17,16 +18,34 @@ public actor LoginService {
         Keychains.token != nil
     }
 
+    /// Fires whenever the stored token is replaced or cleared, so screens showing what the current
+    /// authorization allows can refresh themselves without being told to.
+    public nonisolated var authorizationDidChange: AnyPublisher<Void, Never> {
+        Keychains.$token
+            .map { _ in () }
+            .eraseToAnyPublisher()
+    }
+
+    /// Whether the stored token already carries everything the given access level needs. A token
+    /// granted before the user opted into private repositories will not, which is what drives the
+    /// reauthorization prompt in Settings.
+    public nonisolated func hasGrantedAccess(for accessLevel: RepositoryAccessLevel) -> Bool {
+        OAuthScopeSatisfaction.grantedScopeString(
+            Keychains.token?.scope,
+            satisfies: accessLevel.scopes
+        )
+    }
+
     private var loginTask: Task<Token, Error>?
 
-    public func login() async throws {
+    public func login(accessLevel: RepositoryAccessLevel) async throws {
         loginTask?.cancel()
 
         let service = self
         let task = Task { () throws -> Token in
             try await GitHubClient.deviceFlowLogin(
                 clientID: Configs.App.githubID,
-                scopes: Configs.App.githubScopes,
+                scopes: accessLevel.scopes,
                 onUserCode: { deviceCode in
                     Task { await service.publishDeviceCode(deviceCode) }
                 }

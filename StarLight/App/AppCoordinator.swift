@@ -15,13 +15,16 @@ import KeyboardShortcuts
 enum AppRoute: Routable {
     case login
     case authenticationFailed
+    /// Sign in again to widen the granted scopes — the user turned on private repository search
+    /// and the stored token predates that choice.
+    case reauthorize
     case settings
     case main
     case refresh
 
     var requiresAuthentication: Bool {
         switch self {
-        case .login, .authenticationFailed:
+        case .login, .authenticationFailed, .reauthorize:
             false
         case .settings, .main, .refresh:
             true
@@ -55,7 +58,7 @@ final class AppCoordinator: CocoaCoordinator.AppCoordinator<AppRoute> {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleAuthenticationFailed),
-            name: .repositoriesServiceAuthenticationFailed,
+            name: .gitHubAuthenticationFailed,
             object: nil
         )
     }
@@ -78,22 +81,27 @@ final class AppCoordinator: CocoaCoordinator.AppCoordinator<AppRoute> {
         }
         switch finalRoute {
         case .login:
-            return loginTransition(errorMessage: nil)
+            return loginTransition(notice: nil)
         case .authenticationFailed:
             return authenticationFailureTransition()
+        case .reauthorize:
+            return loginTransition(notice: .information(
+                "StarLight needs wider access to search your private repositories. Sign in again to grant it."
+            ))
         case .settings:
             return settingsTransition()
         case .main:
             return .route(on: mainCoordinator, to: .present)
         case .refresh:
             Task {
-                await appServices.repositoriesService.refresh()
+                await appServices.starredRepositoriesService.refresh()
+                await appServices.personalRepositoriesService.refresh()
             }
             return .none()
         }
     }
 
-    private func loginTransition(errorMessage: String?) -> AppTransition {
+    private func loginTransition(notice: LoginNotice?) -> AppTransition {
         let loginCoordinator: LoginCoordinator
         if let existingLoginCoordinator = children.first(where: { $0 is LoginCoordinator }) as? LoginCoordinator {
             loginCoordinator = existingLoginCoordinator
@@ -101,7 +109,7 @@ final class AppCoordinator: CocoaCoordinator.AppCoordinator<AppRoute> {
             loginCoordinator = LoginCoordinator(appServices: appServices)
         }
         loginCoordinator.delegate = self
-        return .route(on: loginCoordinator, to: .login(errorMessage: errorMessage))
+        return .route(on: loginCoordinator, to: .login(notice: notice))
     }
 
     private func settingsTransition() -> AppTransition {
@@ -122,7 +130,7 @@ final class AppCoordinator: CocoaCoordinator.AppCoordinator<AppRoute> {
         if let settingsCoordinator = children.first(where: { $0 is SettingsCoordinator }) as? SettingsCoordinator {
             transitions.append(.route(on: settingsCoordinator, to: .dismiss))
         }
-        transitions.append(loginTransition(errorMessage: "Your GitHub token is no longer valid. Please log in again."))
+        transitions.append(loginTransition(notice: .failure("Your GitHub token is no longer valid. Please log in again.")))
         return .multiple(transitions)
     }
 }
@@ -136,5 +144,9 @@ extension AppCoordinator: LoginCoordinator.Delegate {
 extension AppCoordinator: SettingsCoordinator.Delegate {
     func settingsCoordinatorDidLogout(_ coordinator: SettingsCoordinator) {
         trigger(.login)
+    }
+
+    func settingsCoordinatorDidRequestReauthorization(_ coordinator: SettingsCoordinator) {
+        trigger(.reauthorize)
     }
 }

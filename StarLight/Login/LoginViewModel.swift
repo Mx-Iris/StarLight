@@ -2,6 +2,7 @@ import AppKit
 import Foundation
 import Combine
 import CocoaCoordinator
+import Defaults
 import GitHubModels
 import StarLightCore
 
@@ -9,12 +10,12 @@ import StarLightCore
 final class LoginViewModel: ViewModel<LoginRoute>, ObservableObject {
     @Published private(set) var deviceCode: DeviceCode?
     @Published private(set) var isAuthorizing: Bool = false
-    @Published private(set) var errorMessage: String?
+    @Published private(set) var notice: LoginNotice?
 
     private var loginTask: Task<Void, Never>?
 
-    init(appServices: AppServices, router: any Router<LoginRoute>, initialErrorMessage: String? = nil) {
-        self.errorMessage = initialErrorMessage
+    init(appServices: AppServices, router: any Router<LoginRoute>, initialNotice: LoginNotice? = nil) {
+        self.notice = initialNotice
         super.init(appServices: appServices, router: router)
         let service = appServices.loginService
         Task { @MainActor in
@@ -24,20 +25,20 @@ final class LoginViewModel: ViewModel<LoginRoute>, ObservableObject {
 
     func startLogin() {
         guard !isAuthorizing else { return }
-        errorMessage = nil
+        notice = nil
         deviceCode = nil
         isAuthorizing = true
 
         loginTask = Task { [weak self] in
             guard let self else { return }
             do {
-                try await appServices.loginService.login()
+                try await appServices.loginService.login(accessLevel: .preferred)
                 guard !Task.isCancelled else { return }
                 router.trigger(.logged)
             } catch is CancellationError {
                 // User cancelled — silent.
             } catch {
-                errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+                notice = .failure((error as? LocalizedError)?.errorDescription ?? error.localizedDescription)
             }
             isAuthorizing = false
             deviceCode = nil
@@ -50,7 +51,7 @@ final class LoginViewModel: ViewModel<LoginRoute>, ObservableObject {
         Task { await appServices.loginService.cancelLogin() }
         isAuthorizing = false
         deviceCode = nil
-        errorMessage = nil
+        notice = nil
     }
 
     func authorizeOnGitHub() {

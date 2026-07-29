@@ -6,6 +6,9 @@ enum SettingsRoute: Routable {
     case settings
     case dismiss
     case logout
+    /// Ask the app to sign in again for wider scopes. Settings deliberately stays open, so the user
+    /// lands back on the toggle they just flipped once GitHub has authorized them.
+    case reauthorize
 }
 
 typealias SettingsTransition = SceneTransition<SettingsWindowController, SettingsViewController>
@@ -13,6 +16,7 @@ typealias SettingsTransition = SceneTransition<SettingsWindowController, Setting
 final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransition> {
     protocol Delegate: AnyObject {
         func settingsCoordinatorDidLogout(_ coordinator: SettingsCoordinator)
+        func settingsCoordinatorDidRequestReauthorization(_ coordinator: SettingsCoordinator)
     }
 
     let appServices: AppServices
@@ -32,6 +36,8 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
             return .show(settingsViewController)
         case .dismiss, .logout:
             return .close()
+        case .reauthorize:
+            return .none()
         }
     }
 
@@ -44,6 +50,8 @@ final class SettingsCoordinator: SceneCoordinator<SettingsRoute, SettingsTransit
             break
         case .logout:
             delegate?.settingsCoordinatorDidLogout(self)
+        case .reauthorize:
+            delegate?.settingsCoordinatorDidRequestReauthorization(self)
         }
     }
 }

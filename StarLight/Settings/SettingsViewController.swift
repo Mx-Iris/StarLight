@@ -35,6 +35,12 @@ struct SettingsView: View {
     @Default(.repositoriesRefreshInterval)
     private var repositoriesRefreshInterval
 
+    @Default(.searchPersonalRepositories)
+    private var searchPersonalRepositories
+
+    @Default(.includePrivateRepositories)
+    private var includePrivateRepositories
+
     var body: some View {
         VStack {
             Form {
@@ -55,9 +61,7 @@ struct SettingsView: View {
                         Text("Repositories Refresh Interval (minutes)")
                     }
                     .onChange(of: repositoriesRefreshInterval) { newValue in
-                        Task {
-                            await viewModel.appServices.repositoriesService.setRefreshInterval(newValue)
-                        }
+                        viewModel.repositoriesRefreshIntervalDidChange(to: newValue)
                     }
 
                     HStack {
@@ -98,9 +102,59 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                Section {
+                    Toggle(isOn: $searchPersonalRepositories) {
+                        Text("Search My Repositories")
+                        Text("Includes repositories you own and every repository under your organizations.")
+                    }
+                    .onChange(of: searchPersonalRepositories) { newValue in
+                        viewModel.searchPersonalRepositoriesDidChange(to: newValue)
+                    }
+
+                    Toggle(isOn: $includePrivateRepositories) {
+                        Text("Include Private Repositories")
+                        Text("GitHub publishes no read-only scope for private repositories, so this asks for the read/write \"repo\" scope and requires signing in again.")
+                    }
+                    .onChange(of: includePrivateRepositories) { newValue in
+                        viewModel.includePrivateRepositoriesDidChange(to: newValue)
+                    }
+
+                    if viewModel.needsReauthorizationForPrivateRepositories {
+                        HStack {
+                            Label(
+                                "Private repositories stay hidden until you authorize the wider access.",
+                                systemImage: "exclamationmark.triangle"
+                            )
+                            .foregroundColor(.secondary)
+                            .font(.callout)
+                            Spacer()
+                            Button {
+                                viewModel.reauthorize()
+                            } label: {
+                                Text("Sign In Again")
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Repository Sources")
+                }
             }
             .formStyle(.grouped)
             .frame(width: 500)
+        }
+        .alert(
+            "Sign in to GitHub again?",
+            isPresented: $viewModel.isPresentingPrivateRepositoryAuthorizationAlert
+        ) {
+            Button("Sign In Again") {
+                viewModel.reauthorize()
+            }
+            Button("Cancel", role: .cancel) {
+                viewModel.declinePrivateRepositoryAuthorization()
+            }
+        } message: {
+            Text("Searching private repositories needs GitHub's \"repo\" scope, which also grants write access, plus \"read:org\" to list organizations whose membership you have kept private. StarLight only ever reads.")
         }
     }
 }

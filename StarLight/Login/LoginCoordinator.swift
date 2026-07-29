@@ -2,8 +2,29 @@ import AppKit
 import GitHubModels
 import CocoaCoordinator
 
+/// A message shown on the login screen above the sign-in button. Asking the user to authorize again
+/// for wider access is a normal request rather than a failure, so the two read differently.
+enum LoginNotice: Equatable {
+    case failure(String)
+    case information(String)
+
+    var message: String {
+        switch self {
+        case .failure(let message), .information(let message):
+            message
+        }
+    }
+
+    var isFailure: Bool {
+        switch self {
+        case .failure: true
+        case .information: false
+        }
+    }
+}
+
 enum LoginRoute: Routable {
-    case login(errorMessage: String?)
+    case login(notice: LoginNotice?)
     case logged
 }
 
@@ -25,8 +46,8 @@ final class LoginCoordinator: SceneCoordinator<LoginRoute, LoginTransition> {
 
     override func prepareTransition(for route: LoginRoute) -> LoginTransition {
         switch route {
-        case .login(let errorMessage):
-            let viewModel = LoginViewModel(appServices: appServices, router: self, initialErrorMessage: errorMessage)
+        case .login(let notice):
+            let viewModel = LoginViewModel(appServices: appServices, router: self, initialNotice: notice)
             let viewController = LoginViewController(viewModel: viewModel)
             return .show(viewController)
         case .logged:

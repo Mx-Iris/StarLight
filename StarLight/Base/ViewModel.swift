@@ -1,6 +1,9 @@
 import Foundation
 import CocoaCoordinator
 
+/// Every concrete view model is `@MainActor`, so the base class is too — otherwise a subclass
+/// initializer cannot touch its own main-actor state.
+@MainActor
 class ViewModel<Route: Routable> {
     let appServices: AppServices
     

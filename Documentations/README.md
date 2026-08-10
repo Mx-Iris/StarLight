@@ -23,4 +23,5 @@ StarLight 的设计与演进记录。这些是面向维护者的内部文档，�
 | [StarredRepositoriesRefreshOptimization.md](StarredRepositoriesRefreshOptimization.md) | starred repositories 刷新策略：轻量成员探测、串行完整刷新、手动刷新抢占规则，以及缓存文件格式的兼容处理。 |
 | [PersonalRepositoriesSearch.md](PersonalRepositoriesSearch.md) | 搜索自己的仓库与组织仓库：为什么要三个端点、为什么私有仓库做成可选开关（GitHub 没有只读的私有仓库 scope）、以及一批消除歧义的重命名。 |
 | [RepositorySearchMatching.md](RepositorySearchMatching.md) | 搜索栏的匹配与排序规则：GitHub 网页端 "Search stars" 的实测行为、本地复刻时的两处偏离（不搜 owner、CJK 退回子串），以及为什么必须预建索引。 |
+| [WindowSizingAndPlacement.md](WindowSizingAndPlacement.md) | 窗口尺寸与定位：AppKit 改窗口 frame 的三条通路、`NSHostingView` 交接 SwiftUI 尺寸的四套机制、SwiftUI Scene 自己摆窗口的流程，以及为什么 Settings 窗口必须靠 `setAnchorAttribute` 才能真正居中。基于 macOS 26.6 反编译。 |
 | [ReleaseCI.md](ReleaseCI.md) | 发布流程：GitHub Actions 如何签名、公证、打包并发布 Release，本地怎么用同一份 `scripts/release.sh` 跑，以及 release notes 的硬性前置条件。 |

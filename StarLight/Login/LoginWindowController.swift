@@ -16,7 +16,7 @@ final class LoginWindowController: XiblessWindowController<LoginWindow> {
     override func windowDidLoad() {
         super.windowDidLoad()
         contentWindow.setFrame(Self.defaultRect, display: false)
-        contentWindow.box.positionCenter()
+        contentWindow.box.centerInScreen()
         contentWindow.titleVisibility = .hidden
         contentWindow.titlebarAppearsTransparent = true
         contentWindow.delegate = self

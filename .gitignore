@@ -4,3 +4,5 @@ xcuserdata
 StarLight.xcworkspace/xcshareddata
 swiftui-async-button-main/.swiftpm
 .swiftpm
+build/
+.worktrees/

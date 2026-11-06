@@ -136,7 +136,7 @@ first launch and does not cost you a full re-fetch.
 | `Components/` | Local Swift package — `StarLightCore`, `StarLightUI`, `StarLightUtilities`, `StarLightResources` |
 | `Documentations/` | Design and evolution notes ([index](Documentations/README.md)) |
 | `ReleaseNotes/` | One file per release tag, used verbatim as the GitHub Release body |
-| `scripts/`, `.github/workflows/` | The signed-and-notarized release pipeline |
+| `Release.zsh`, `.github/workflows/` | The signed and notarized release, made by [AppRelease](https://github.com/Mx-Iris/AppRelease) |
 
 Contributors and coding agents should start with [`AGENTS.md`](AGENTS.md), which documents the
 architecture, build commands, and repository conventions in one place.

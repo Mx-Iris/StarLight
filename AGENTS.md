@@ -189,11 +189,14 @@ dependency workaround, not application code.
 
 ## Releasing
 
-Releases are automated by `.github/workflows/release.yml` (build → sign → notarize → staple → zip →
-GitHub Release), with `scripts/release.sh` as the same pipeline runnable locally.
+Releases are made by [AppRelease](https://github.com/Mx-Iris/AppRelease) from `Release.zsh` at the
+repository root (archive → Developer ID export → notarize → staple → zip → GitHub Release).
+`.github/workflows/release.yml` runs it when a `vX.Y` tag is pushed; running that workflow by hand
+without a tag builds and notarizes a branch without publishing. `app-release all` runs the same
+release on a Mac. Change `Release.zsh` rather than adding release steps to the workflow.
 
 **Hard rule: `ReleaseNotes/<tag>.md` must exist and be non-empty before you push a `vX.Y` tag.**
-CI fails before any signing happens if it is missing. Release notes are public-facing and written
+The release stops before anything is built if it is missing. Release notes are public-facing and written
 in English; see [`ReleaseNotes/README.md`](ReleaseNotes/README.md) for the expected shape and
 [`Documentations/ReleaseCI.md`](Documentations/ReleaseCI.md) for the full pipeline.
 

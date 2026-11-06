@@ -6,8 +6,8 @@ This folder is the source of truth for the body of every GitHub Release.
 
 - One file per release tag: `ReleaseNotes/<tag>.md`, e.g. `ReleaseNotes/v1.7.md`.
 - The file is read verbatim as the body of the GitHub Release.
-- If the file is missing or empty, the release CI fails before any signing or
-  notarization happens.
+- If the file is missing or empty, the release stops before anything is built,
+  signed, or notarized.
 - Notes are public-facing and shown to anyone landing on the release page —
   write them in English.
 
